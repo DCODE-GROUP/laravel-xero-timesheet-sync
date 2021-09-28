@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Dcodegroup\LaravelXeroTimesheets;
-
 
 use App\Models\Timesheet;
 //use App\Services\Xero\TimesheetService;
@@ -14,7 +12,10 @@ use Illuminate\Queue\SerializesModels;
 
 class ExportXeroTimesheet implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     protected Timesheet $timesheet;
 
