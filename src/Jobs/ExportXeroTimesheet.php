@@ -1,11 +1,13 @@
 <?php
 
-namespace Dcodegroup\LaravelXeroTimesheets;
+namespace Dcodegroup\LaravelXeroTimesheetSync\Jobs;
 
 use App\Models\Timesheet;
 //use App\Services\Xero\TimesheetService;
+use Dcodegroup\LaravelXeroTimesheetSync\XeroTimesheetSyncService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -17,16 +19,12 @@ class ExportXeroTimesheet implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    protected Timesheet $timesheet;
+    protected Model $timesheet;
 
-    /**
-     * ExportXeroTimesheet constructor.
-     * @param Timesheet $timesheet
-     */
-    public function __construct(Timesheet $timesheet)
+    public function __construct(Model $timesheet)
     {
-        $this->queue = config('laravel-xero-timesheets.queue_name');
-        $timesheet->xeroException()->delete();
+        $this->queue = config('laravel-xero-timesheet-sync.queue_name');
+        //$timesheet->xeroException()->delete();
         $this->timesheet = $timesheet;
     }
 
@@ -37,7 +35,7 @@ class ExportXeroTimesheet implements ShouldQueue
      */
     public function handle()
     {
-        $service = resolve(TimesheetService::class);
+        $service = resolve(XeroTimesheetSyncService::class);
         $service->updateXeroTimesheet($this->timesheet);
     }
 }

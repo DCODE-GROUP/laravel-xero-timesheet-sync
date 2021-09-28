@@ -1,12 +1,11 @@
 <?php
 
-namespace Dcodegroup\LaravelXeroTimesheets;
+namespace Dcodegroup\LaravelXeroTimesheetSync;
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use XeroPHP\Application;
 
-class LaravelXeroTimesheetsServiceProvider extends ServiceProvider
+class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application events.
@@ -14,15 +13,16 @@ class LaravelXeroTimesheetsServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->offerPublishing();
-        $this->registerResources();
+
+        $timesheetClass = config('laravel-xero-timesheet-sync.timesheet_model');
     }
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/laravel-xero-timesheets.php', 'laravel-xero-timesheets');
+        $this->mergeConfigFrom(__DIR__ . '/../config/laravel-xero-timesheet-sync.php', 'laravel-xero-timesheet-sync');
 
-        $this->app->bind(XeroTimesheetService::class, function () {
-            return new XeroTimesheetService(resolve(Application::class));
+        $this->app->bind(XeroTimesheetSyncService::class, function () {
+            return new XeroTimesheetSyncService(resolve(Application::class));
         });
     }
 
@@ -41,6 +41,6 @@ class LaravelXeroTimesheetsServiceProvider extends ServiceProvider
         //                     ], 'laravel-xero-oauth-migrations');
         //}
 
-        $this->publishes([__DIR__ . '/../config/laravel-xero-timesheets.php' => config_path('laravel-xero-timesheets.php')], 'laravel-xero-timesheets-config');
+        $this->publishes([__DIR__ . '/../config/laravel-xero-timesheet-sync.php' => config_path('laravel-xero-timesheet-sync.php')], 'laravel-xero-timesheet-sync-config');
     }
 }
