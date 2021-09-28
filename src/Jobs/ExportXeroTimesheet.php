@@ -2,7 +2,6 @@
 
 namespace Dcodegroup\LaravelXeroTimesheetSync\Jobs;
 
-use App\Models\Timesheet;
 //use App\Services\Xero\TimesheetService;
 use Dcodegroup\LaravelXeroTimesheetSync\XeroTimesheetSyncService;
 use Illuminate\Bus\Queueable;
