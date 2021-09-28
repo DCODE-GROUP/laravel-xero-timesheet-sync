@@ -1,0 +1,52 @@
+{
+  "name": "dcodegroup/laravel-xero-timesheets",
+  "description": "This package provides the standard xero functionality for syncing timesheets from your app to Xero.",
+  "keywords": [
+    "laravel",
+    "xero",
+    "dcode",
+    "timesheets"
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Nathan Rzepecki",
+      "email": "nathan@lionslair.net.au",
+      "homepage": "https://www.lionslair.net.au",
+      "role": "Developer"
+    },
+    {
+      "name": "Dcode Group",
+      "email": "forge@dcodegroup.com",
+      "homepage": "https://dcodegroup.com"
+    }
+  ],
+  "require": {
+    "php": "^7.4|^8.0",
+    "dcodegroup/laravel-xero-oauth": "^1.0"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.16"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dcodegroup\\LaravelXeroTimesheets\\": "src"
+    }
+  },
+  "scripts": {
+    "psalm": "vendor/bin/psalm",
+    "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Dcodegroup\\LaravelXeroOauth\\LaravelXeroTimesheetsServiceProvider"
+      ]
+    }
+  }
+}
