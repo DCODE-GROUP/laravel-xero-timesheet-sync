@@ -22,3 +22,4 @@ This will publish the configuration file.
 
 Most of configuration has been set the fair defaults. However you can review the configuration file at `config/laravel-xero-timesheet-sync.php` and adjust as needed
 
+You should add the trait to your Timesheet::class ````
