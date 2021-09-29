@@ -3,7 +3,7 @@
 namespace Dcodegroup\LaravelXeroTimesheetSync\Jobs;
 
 //use App\Services\Xero\TimesheetService;
-use Dcodegroup\LaravelXeroTimesheetSync\XeroTimesheetSyncService;
+use Dcodegroup\LaravelXeroTimesheetSync\XeroTimesheetSyncPayrollService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Model;
@@ -34,7 +34,7 @@ class ExportXeroTimesheet implements ShouldQueue
      */
     public function handle()
     {
-        $service = resolve(XeroTimesheetSyncService::class);
+        $service = resolve(XeroTimesheetSyncPayrollService::class);
         $service->updateXeroTimesheet($this->timesheet);
     }
 }

@@ -21,8 +21,8 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/laravel-xero-timesheet-sync.php', 'laravel-xero-timesheet-sync');
 
-        $this->app->bind(XeroTimesheetSyncService::class, function () {
-            return new XeroTimesheetSyncService(resolve(Application::class));
+        $this->app->bind(XeroTimesheetSyncPayrollService::class, function () {
+            return new XeroTimesheetSyncPayrollService(resolve(Application::class));
         });
     }
 
@@ -33,14 +33,6 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
      */
     protected function offerPublishing()
     {
-        //if (! Schema::hasTable('xero_tokens') && ! class_exists('CreateXeroTokensTable')) {
-        //    $timestamp = date('Y_m_d_His', time());
-        //
-        //    $this->publishes([
-        //                         __DIR__ . '/../database/migrations/create_xero_tokens_table.php.stub.php' => database_path('migrations/' . $timestamp . '_create_xero_tokens_table.php'),
-        //                     ], 'laravel-xero-oauth-migrations');
-        //}
-
         $this->publishes([__DIR__ . '/../config/laravel-xero-timesheet-sync.php' => config_path('laravel-xero-timesheet-sync.php')], 'laravel-xero-timesheet-sync-config');
     }
 }
