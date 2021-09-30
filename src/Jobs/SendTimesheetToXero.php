@@ -11,7 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ExportXeroTimesheet implements ShouldQueue
+class SendTimesheetToXero implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
