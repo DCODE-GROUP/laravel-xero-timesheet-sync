@@ -2,7 +2,6 @@
 
 namespace Dcodegroup\LaravelXeroTimesheetSync;
 
-use App\Models\Setting;
 use App\Models\Timesheet;
 use App\Services\Xero\PayrollCalendarService;
 use App\Services\Xero\PayrollService;
@@ -38,20 +37,20 @@ class XeroTimesheetSyncPayrollService extends BaseXeroPayrollService
         /**
          * Only send to xero if the timehseet not linked to booking and the timesheet is approved
          */
-        if (!$timesheet->canSendToXero()) {
+        if (! $timesheet->canSendToXero()) {
             return;
         }
 
         try {
             // Validate employee
             $user = $timesheet->booking->user ?? $timesheet->user;
-            if (!$user->isValidXeroEmployee()) {
+            if (! $user->isValidXeroEmployee()) {
                 throw new Exception('Employee #' . $user->id . '/' . $user->email . ' does not have valid Xero employee data');
             }
 
             // Get calendar
             $payrollService = resolve(PayrollService::class);
-            if (!($payRollCalendar = $payrollService->getDefaultPayrollCalendar()) || $payRollCalendar instanceof Exception) {
+            if (! ($payRollCalendar = $payrollService->getDefaultPayrollCalendar()) || $payRollCalendar instanceof Exception) {
                 throw new Exception('Unable to retrieve Xero payroll calendar data');
             }
 
@@ -82,7 +81,7 @@ class XeroTimesheetSyncPayrollService extends BaseXeroPayrollService
                 logger('updating existing timesheet');
                 $guid = (object) [
                     'identifier' => 'TimesheetID',
-                    'guid'       => $existingXeroTimesheet->xero_timesheet_id,
+                    'guid' => $existingXeroTimesheet->xero_timesheet_id,
                 ];
 
                 $xeroAPITimesheet = $this->updateModel(XeroAPITimesheet::class, $guid, $xeroAPITimesheetModel->parameters, $linesModel);
@@ -99,7 +98,7 @@ class XeroTimesheetSyncPayrollService extends BaseXeroPayrollService
                     if ($xeroAPITimesheet->getCode() == 400) {
                         $guid = (object) [
                             'identifier' => 'TimesheetID',
-                            'guid'       => $existingXeroTimesheet->xero_timesheet_id,
+                            'guid' => $existingXeroTimesheet->xero_timesheet_id,
                         ];
 
                         $xeroAPITimesheet = $this->updateModel(XeroAPITimesheet::class, $guid, $xeroAPITimesheetModel->parameters, $linesModel);
@@ -118,5 +117,4 @@ class XeroTimesheetSyncPayrollService extends BaseXeroPayrollService
             $this->updateOrCreateException($e, $timesheet);
         }
     }
-    
 }
