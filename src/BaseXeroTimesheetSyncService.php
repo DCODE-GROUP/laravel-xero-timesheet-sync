@@ -3,14 +3,11 @@
 namespace Dcodegroup\LaravelXeroTimesheetSync;
 
 use App\Models\Timesheet;
-use App\Services\Xero\PayrollCalendarService;
-use App\Services\Xero\PayrollService;
 use Dcodegroup\LaravelXeroOauth\BaseXeroService;
-use Illuminate\Database\Eloquent\Collection;
 use XeroPHP\Models\PayrollAU\Timesheet as XeroAPITimesheet;
 use XeroPHP\Remote\Exception\BadRequestException;
 
-class XeroTimesheetSyncService extends BaseXeroService
+class BaseXeroTimesheetSyncService extends BaseXeroService
 {
     /**
      * Updates xero timesheet for given $timesheet

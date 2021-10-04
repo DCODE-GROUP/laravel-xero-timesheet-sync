@@ -2,6 +2,14 @@
 
 namespace Dcodegroup\LaravelXeroTimesheetSync\Traits;
 
-class XeroTimesheetable
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+
+trait XeroTimesheetable
 {
+
+    public function xeroTimesheetable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
 }
