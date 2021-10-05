@@ -35,7 +35,7 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
         $this->publishes([__DIR__.'/../config/laravel-xero-timesheet-sync.php' => config_path('laravel-xero-timesheet-sync.php')], 'laravel-xero-timesheet-sync-config');
 
         if (Schema::hasTable('timesheets')
-            && !Schema::hasColumns('timesheets', [
+            && ! Schema::hasColumns('timesheets', [
                 'can_include_in_xero_sync',
                 'units',
                 'xero_timesheet_id',
