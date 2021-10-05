@@ -10,35 +10,29 @@ use XeroPHP\Remote\Exception\BadRequestException;
 class BaseXeroTimesheetSyncService extends BaseXeroService
 {
     /**
-     * Updates xero timesheet for given $timesheet
+     * Updates xero timesheet for given $timesheet.
      *
      * Timesheets in Xero are stored as a group of timesheet lines
      * given this, the timesheet itself is only used as a range selector in order to select a collection and generate
      * these lines lines contain the actual hour values for each included timesheet and are linked to a XeroTimesheet
-     *
-     * @param  Timesheet  $timesheet
-     *
-     * @return void
      */
     public function updateXeroTimesheet(Timesheet $timesheet)
     {
-        /**
-         * Only send to xero if the timehseet not linked to booking and the timesheet is approved
-         */
-        if (! $timesheet->canSendToXero()) {
+        // Only send to xero if the timehseet not linked to booking and the timesheet is approved
+        if (!$timesheet->canSendToXero()) {
             return;
         }
 
         try {
             // Validate employee
             $user = $timesheet->booking->user ?? $timesheet->user;
-            if (! $user->isValidXeroEmployee()) {
-                throw new Exception('Employee #' . $user->id . '/' . $user->email . ' does not have valid Xero employee data');
+            if (!$user->isValidXeroEmployee()) {
+                throw new Exception('Employee #'.$user->id.'/'.$user->email.' does not have valid Xero employee data');
             }
 
             // Get calendar
             $payrollService = resolve(PayrollService::class);
-            if (! ($payRollCalendar = $payrollService->getDefaultPayrollCalendar()) || $payRollCalendar instanceof Exception) {
+            if (!($payRollCalendar = $payrollService->getDefaultPayrollCalendar()) || $payRollCalendar instanceof Exception) {
                 throw new Exception('Unable to retrieve Xero payroll calendar data');
             }
 
@@ -83,7 +77,7 @@ class BaseXeroTimesheetSyncService extends BaseXeroService
                     logger($xeroAPITimesheet->getMessage());
                     report($xeroAPITimesheet);
 
-                    if ($xeroAPITimesheet->getCode() == 400) {
+                    if (400 == $xeroAPITimesheet->getCode()) {
                         $guid = (object) [
                             'identifier' => 'TimesheetID',
                             'guid' => $existingXeroTimesheet->xero_timesheet_id,

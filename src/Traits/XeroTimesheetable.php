@@ -3,12 +3,17 @@
 namespace Dcodegroup\LaravelXeroTimesheetSync\Traits;
 
 use Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 trait XeroTimesheetable
 {
-    public function xeroTimesheetable(): MorphTo
+    public function xeroTimesheetable(): MorphOne
     {
         return $this->morphOne(XeroTimesheet::class, 'xerotransformable');
+    }
+
+    public function canSendToXero(): bool
+    {
+        return $this->can_include_in_xero_sync == true;
     }
 }

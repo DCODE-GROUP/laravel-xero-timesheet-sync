@@ -12,7 +12,7 @@ class XeroTimesheetLines extends Model
     /**
      * The attributes that aren't mass assignable.
      *
-     * @var string[]|bool
+     * @var bool|string[]
      */
     protected $guarded = [];
 

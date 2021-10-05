@@ -106,6 +106,17 @@ It is suggested that you also cast the `can_include_in_xero_sync` as a boolean f
 
 ```
 
+You should add the interface to the `Timesheet::class` model.
+
+```php
+
+use Dcodegroup\LaravelXeroTimesheetSync\Contracts\SyncsTimesheetsToXero;
+
+class Timesheet extends BaseTimesheet implements SyncsTimesheetsToXero
+{
+
+```
+
 You should add the following trait to the Timesheet model.
 
 ```php
@@ -114,3 +125,6 @@ class Timesheet extends Authenticatable
     use XeroTimesheetable;
 
 ```
+
+
+you need to implement these methods
