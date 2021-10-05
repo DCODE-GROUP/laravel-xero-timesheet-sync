@@ -24,5 +24,4 @@ class XeroTimesheetLines extends Model
     protected $casts = [
         'date' => 'date',
     ];
-
 }
