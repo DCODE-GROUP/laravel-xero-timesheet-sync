@@ -3,6 +3,7 @@
 namespace Dcodegroup\LaravelXeroTimesheetSync;
 
 use Dcodegroup\LaravelXeroTimesheetSync\Commands\InstallCommand;
+use Dcodegroup\LaravelXeroTimesheetSync\Observers\LaravelXeroTimesheetSyncObseerver;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use XeroPHP\Application;
@@ -16,6 +17,9 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
     {
         $this->offerPublishing();
         $this->registerCommands();
+
+        $timesheetClass = config('laravel-xero-timesheet-sync.timesheet_model');
+        $timesheetClass::observe(new LaravelXeroTimesheetSyncObseerver());
     }
 
     public function register()
