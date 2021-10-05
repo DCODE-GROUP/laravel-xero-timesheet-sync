@@ -40,7 +40,7 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
             ! Schema::hasColumns('timesheets', [
                 'can_include_in_xero_sync',
                 'units',
-                'xero_timesheet_id'
+                'xero_timesheet_id',
             ])) {
             $timestamp = date('Y_m_d_His', time());
 
@@ -49,7 +49,7 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
                              ], 'laravel-xero-timesheet-sync-timesheet-table-migrations');
         }
 
-        if (!Schema::hasTable('xero_timesheets')) {
+        if (! Schema::hasTable('xero_timesheets')) {
             $timestamp = date('Y_m_d_His', time());
 
             $this->publishes([
@@ -57,7 +57,7 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
                              ], 'laravel-xero-timesheet-sync-timesheet-table-migrations');
         }
 
-        if (!Schema::hasTable('xero_timesheet_lines')) {
+        if (! Schema::hasTable('xero_timesheet_lines')) {
             $timestamp = date('Y_m_d_His', time());
 
             $this->publishes([
