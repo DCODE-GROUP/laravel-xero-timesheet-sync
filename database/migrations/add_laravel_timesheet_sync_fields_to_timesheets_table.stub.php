@@ -1,10 +1,11 @@
 <?php
 
+use Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddCanIncludeInXeroSyncToTimesheetsTable extends Migration
+class AddLaravelTimesheetSyncFieldsToTimesheetsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +14,11 @@ class AddCanIncludeInXeroSyncToTimesheetsTable extends Migration
      */
     public function up()
     {
-        Schema::table('timehseets', function (Blueprint $table) {
+        Schema::table('timesheets', function (Blueprint $table) {
             $table->after('stop', function ($table) {
                 $table->boolean('can_include_in_xero_sync')->default(false);
+                $table->double('units', 8, 2);
+                $table->foreignIdFor(XeroTimesheet::class)->nullable();
             });
         });
     }

@@ -7,24 +7,23 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateXeroTimesheetLinesTable extends Migration
 {
-        public function up()
-        {
-            Schema::create('xero_timesheet_lines', function (Blueprint $table) {
-                $table->id();
-                $table->foreignIdFor(XeroTimesheet::class);
-                $table->string('xero_employee_id', 50)->nullable();
-                $table->string('status', 50)->nullable();
-                $table->dateTime('start_date');
-                $table->dateTime('end_date');
-                $table->double('8,2');
+    public function up()
+    {
+        Schema::create('xero_timesheet_lines', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(XeroTimesheet::class);
+            $table->string('xero_earnings_rate_id', 50);
+            $table->string('xero_tracking_item_id', 50)->nullable()->comment('rarely used but just in case its needed');
+            $table->date('date');
+            $table->double('units', 8,2);
+            $table->double('units_override', 8,2);
+            $table->softDeletes();
+            $table->timestamps();
+        });
+    }
 
-                $table->softDeletes();
-                $table->timestamps();
-            });
-        }
-
-        public function down()
-        {
-            Schema::dropIfExists('xero_timesheets');
-        }
+    public function down()
+    {
+        Schema::dropIfExists('xero_timesheet_lines');
+    }
 }
