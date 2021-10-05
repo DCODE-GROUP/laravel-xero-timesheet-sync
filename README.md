@@ -89,10 +89,20 @@ It is suggested that you also cast the `can_include_in_xero_sync` as a boolean f
      *
      * @var array
      */
-    protected $casts = [
-                   'can_include_in_xero_sync' => 'boolean',
-                   ...
-    ];
+    //protected $casts = [
+    //               'can_include_in_xero_sync' => 'boolean',
+    //               ...
+    //];
+    
+    /**
+      *  Merge casts with the existing
+     */
+    public function getCasts(): array
+    {
+        return parent::getCasts() + [
+            'can_include_in_xero_sync' => 'boolean',
+        ];
+    }
 
 ```
 
