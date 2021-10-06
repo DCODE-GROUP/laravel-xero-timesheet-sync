@@ -27,7 +27,7 @@ class AddLaravelTimesheetSyncFieldsToTimesheetsTable extends Migration
     public function down()
     {
         Schema::table('timesheets', function (Blueprint $table) {
-            $table->dropColumns([
+            $table->dropColumn([
                 'can_include_in_xero_sync',
                 'units',
                 'xero_timesheet_id',
