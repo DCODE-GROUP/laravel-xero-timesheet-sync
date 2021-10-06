@@ -29,7 +29,7 @@ trait XeroTimesheetable
 
     public function toggleIncludeInXeroSync()
     {
-        $this->can_include_in_xero_sync = !$this->can_include_in_xero_sync;
+        $this->can_include_in_xero_sync = ! $this->can_include_in_xero_sync;
         $this->save();
     }
 }
