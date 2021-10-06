@@ -15,8 +15,8 @@ class CreateXeroTimesheetLinesTable extends Migration
             $table->string('xero_earnings_rate_id', 50);
             $table->string('xero_tracking_item_id', 50)->nullable()->comment('rarely used but just in case its needed');
             $table->date('date');
-            $table->double('units', 8,2);
-            $table->double('units_override', 8,2);
+            $table->double('units', 8, 2);
+            $table->double('units_override', 8, 2);
             $table->softDeletes();
             $table->timestamps();
         });

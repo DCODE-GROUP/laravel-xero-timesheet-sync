@@ -9,8 +9,6 @@ class AddLaravelTimesheetSyncFieldsToTimesheetsTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -25,13 +23,15 @@ class AddLaravelTimesheetSyncFieldsToTimesheetsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {
         Schema::table('timesheets', function (Blueprint $table) {
-            $table->dropColumn('can_include_in_xero_sync');
+            $table->dropColumns([
+                'can_include_in_xero_sync',
+                'units',
+                'xero_timesheet_id',
+            ]);
         });
     }
 }
