@@ -16,4 +16,20 @@ trait XeroTimesheetable
     {
         return $this->can_include_in_xero_sync == true;
     }
+
+    public function includeInXeroSync()
+    {
+        $this->update(['can_include_in_xero_sync', true]);
+    }
+
+    public function excludeFromXeroSync()
+    {
+        $this->update(['can_include_in_xero_sync', false]);
+    }
+
+    public function toggleIncludeInXeroSync()
+    {
+        $this->can_include_in_xero_sync = !$this->can_include_in_xero_sync;
+        $this->save();
+    }
 }

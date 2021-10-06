@@ -51,7 +51,7 @@ xero_timesheets_lines
 ---
 id bigint(20) PK IDENTITY
 xero_timesheet_id NULL
-date
+date date
 units double(8,2)
 units_override double(8,2)
 deleted_at timestamp NULL
@@ -128,3 +128,26 @@ class Timesheet extends Authenticatable
 
 
 you need to implement these methods
+
+In order for the timesheet row to be used / factored into sending to Xero the `timesheets.can_include_in_xero_sync` needs to be flagged / set as true or value 1. 
+This needs to be implemented at the local app level. 
+
+Three helper methods are provided in the `XeroTimesheetable.php` trait.
+
+```php
+    public function includeInXeroSync()
+    {
+        $this->update(['can_include_in_xero_sync', true]);
+    }
+
+    public function excludeFromXeroSync()
+    {
+        $this->update(['can_include_in_xero_sync', false]);
+    }
+
+    public function toggleIncludeInXeroSync()
+    {
+        $this->can_include_in_xero_sync = !$this->can_include_in_xero_sync;
+        $this->save();
+    }
+```
