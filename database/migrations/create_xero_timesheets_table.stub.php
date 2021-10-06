@@ -10,12 +10,14 @@ class CreateXeroTimesheetsTable extends Migration
     {
         Schema::create('xero_timesheets', function (Blueprint $table) {
             $table->id();
-            $table->nullableMorphs('XeroTimeshetable');
+            $table->nullableMorphs('xerotimeable');
+            $table->string('xero_timesheet_guid', 50)->nullable()->comment('The identifier provided by Xero');
             $table->string('xero_employee_id', 50)->nullable()->comment('Just saves having to do a lookup all the time');
             $table->string('status', 50)->default('DRAFT')->nullable();
             $table->date('start_date');
             $table->date('end_date');
             $table->double('hours', 8, 2);
+            $table->timestamp('synced_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
