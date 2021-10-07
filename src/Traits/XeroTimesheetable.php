@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 trait XeroTimesheetable
 {
-    public function xeroTimesheetable(): MorphOne
+    public function xerotimeable(): MorphOne
     {
-        return $this->morphOne(XeroTimesheet::class, 'xerotransformable');
+        return $this->morphOne(XeroTimesheet::class, 'xerotimeable');
     }
 
     public function canSendToXero(): bool

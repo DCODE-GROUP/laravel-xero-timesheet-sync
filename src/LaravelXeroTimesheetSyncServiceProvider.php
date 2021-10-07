@@ -4,8 +4,10 @@ namespace Dcodegroup\LaravelXeroTimesheetSync;
 
 use Dcodegroup\LaravelXeroTimesheetSync\Commands\InstallCommand;
 use Dcodegroup\LaravelXeroTimesheetSync\Observers\LaravelXeroTimesheetSyncObseerver;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use XeroPHP\Application;
 
 class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
@@ -20,6 +22,9 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
 
         $timesheetClass = config('laravel-xero-timesheet-sync.timesheet_model');
         $timesheetClass::observe(new LaravelXeroTimesheetSyncObseerver());
+
+        $this->registerResources();
+        $this->registerRoutes();
     }
 
     public function register()
@@ -39,7 +44,7 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
         $this->publishes([__DIR__.'/../config/laravel-xero-timesheet-sync.php' => config_path('laravel-xero-timesheet-sync.php')], 'laravel-xero-timesheet-sync-config');
 
         if (Schema::hasTable('timesheets')
-            && ! Schema::hasColumns('timesheets', [
+            && !Schema::hasColumns('timesheets', [
                 'can_include_in_xero_sync',
                 'units',
                 'xero_timesheet_id',
@@ -51,7 +56,7 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
             ], 'laravel-xero-timesheet-sync-timesheet-table-migrations');
         }
 
-        if (! Schema::hasTable('xero_timesheets')) {
+        if (!Schema::hasTable('xero_timesheets')) {
             $timestamp = date('Y_m_d_His', time());
 
             $this->publishes([
@@ -59,7 +64,7 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
             ], 'laravel-xero-timesheet-sync-timesheet-table-migrations');
         }
 
-        if (! Schema::hasTable('xero_timesheet_lines')) {
+        if (!Schema::hasTable('xero_timesheet_lines')) {
             $timestamp = date('Y_m_d_His', time());
 
             $this->publishes([
@@ -75,5 +80,22 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
                 InstallCommand::class,
             ]);
         }
+    }
+
+    protected function registerResources()
+    {
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'xero-timesheet-sync-translations');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'xero-timesheet-sync-views');
+    }
+
+    protected function registerRoutes()
+    {
+        Route::group([
+            'prefix' => config('laravel-xero-timesheet-sync.path'),
+            'as' => Str::slug(config('laravel-xero-timesheet-sync.as'), '_').'.',
+            'middleware' => config('laravel-xero-timesheet-sync.middleware', 'web'),
+        ], function () {
+                         $this->loadRoutesFrom(__DIR__.'/../routes/laravel_xero_timesheet_sync.php');
+                     });
     }
 }

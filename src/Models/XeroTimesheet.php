@@ -28,7 +28,7 @@ class XeroTimesheet extends Model
         'stop_dte' => 'date',
     ];
 
-    public function xeroTimesheetable(): MorphTo
+    public function xerotimeeable(): MorphTo
     {
         return $this->morphTo();
     }
