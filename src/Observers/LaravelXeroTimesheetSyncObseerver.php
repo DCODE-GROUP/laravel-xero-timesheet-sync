@@ -10,7 +10,7 @@ class LaravelXeroTimesheetSyncObseerver
     public function saving(Model $model)
     {
         if ($model->start instanceof Carbon && $model->stop instanceof Carbon) {
-            $model->units = $model->start->floatDiffInHours($model->stop);
+            $model->units = round($model->start->floatDiffInHours($model->stop), 2);
         }
     }
 }
