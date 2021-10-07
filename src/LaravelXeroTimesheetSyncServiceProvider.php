@@ -2,6 +2,8 @@
 
 namespace Dcodegroup\LaravelXeroTimesheetSync;
 
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Dcodegroup\LaravelXeroTimesheetSync\Commands\InstallCommand;
 use Dcodegroup\LaravelXeroTimesheetSync\Observers\LaravelXeroTimesheetSyncObseerver;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +36,8 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
         $this->app->bind(BaseXeroTimesheetSyncService::class, function () {
             return new BaseXeroTimesheetSyncService(resolve(Application::class));
         });
+
+        $this->registerCarbonMacros();
     }
 
     /**
@@ -96,6 +100,17 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
             'middleware' => config('laravel-xero-timesheet-sync.middleware', 'web'),
         ], function () {
             $this->loadRoutesFrom(__DIR__.'/../routes/laravel_xero_timesheet_sync.php');
+        });
+    }
+
+    public function registerCarbonMacros()
+    {
+        Carbon::macro('addFortnight', function () {
+            return $this->addWeeks(2);
+        });
+
+        Carbon::macro('fortnightUntil', function ($date) {
+            return CarbonPeriod::create($this, '14 days', $date);
         });
     }
 }
