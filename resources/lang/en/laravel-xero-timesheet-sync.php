@@ -9,6 +9,8 @@ return [
 
     'labels' => [
         'payroll_calendar' => 'Payroll Calendar',
+        'payroll_calendar_period' => 'Period',
+        'user' => 'User',
     ]
 
 ];

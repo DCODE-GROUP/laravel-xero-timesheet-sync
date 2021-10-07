@@ -3,8 +3,6 @@
 namespace Dcodegroup\LaravelXeroTimesheetSync\Service;
 
 use Carbon\Carbon;
-use Carbon\CarbonInterval;
-use Carbon\CarbonPeriod;
 use Dcodegroup\LaravelConfiguration\Models\Configuration;
 use XeroPHP\Models\PayrollAU\PayrollCalendar;
 
@@ -21,7 +19,11 @@ class PayrollCalendarService
         ;
     }
 
-    public function generatePeriods(string $payrollCalendarId = null): array
+    public function generatePeriodDays($startDate, $endDate)
+    {
+    }
+
+    public function generateCalendarPeriods(string $payrollCalendarId = null): array
     {
         if (is_null($payrollCalendarId)) {
             return [];
@@ -30,32 +32,44 @@ class PayrollCalendarService
         $calendar = collect($this->configurationPayrollCalendars)->first(function ($value, $key) use ($payrollCalendarId) {
             return data_get($value, 'PayrollCalendarID') == $payrollCalendarId;
         });
-        //dd($calendar);
 
-        $referenceDate = $this->getReferenceDate($calendar);
+        $calendarPeriodStarts = $this->buildCalendarPeriodStartDates($calendar);
 
-        //$period = CarbonPeriod::create($this->getReferenceDate($calendar), $this->{"getInterval".$this->getCalendarType($calendar)}(), $this->getNextPaymentDate($calendar));
-        $periods = $this->buildPeriods($calendar);
+        return collect($calendarPeriodStarts)->map(function ($periodStart) use ($calendar) {
+            $periodEnd = $periodStart->copy()->{$this->getMethodForCalendarType($calendar)}();
 
-        //$periods = call_user_func($this->getReferenceDate($calendar), $this->getInterval($calendar));
-        //dd($this->getReferenceDate($calendar));
-        //$periods = $this->getReferenceDate($calendar)->weeksUntil($this->getNextPaymentDate($calendar));
-
-        //dd(CarbonInterval::months(3));
-        dump($periods);
-
-        foreach ($periods as $period) {
-            dump('period', $period);
-            //dump('start:', $period->getStartDate());
-            //dump('end:', $period->getendDate());
-        }
-
-        return [];
+            return [
+                'value' => $periodStart->toDateString().'||'.$periodEnd->toDateString(),
+                'label' => $periodStart->format('j M Y').' '.$periodEnd->format('j M Y'),
+            ];
+        })->toArray();
     }
 
-    public function getPayrollCalendarsFromConfiguration()
+    public function getPayrollCalendarsFromConfiguration(): array
     {
         return $this->configurationPayrollCalendars;
+    }
+
+    private function getMethodForCalendarType(array $calendar): string
+    {
+        switch ($this->getCalendarType($calendar)) {
+            case PayrollCalendar::CALENDARTYPE_WEEKLY:
+                return 'addWeek';
+
+            case PayrollCalendar::CALENDARTYPE_FORTNIGHTLY:
+            case PayrollCalendar::CALENDARTYPE_TWICEMONTHLY:
+                return 'addFortnight';
+
+            case PayrollCalendar::CALENDARTYPE_MONTHLY:
+            case PayrollCalendar::CALENDARTYPE_FOURWEEKLY:
+                return 'addMonth';
+
+            case PayrollCalendar::CALENDARTYPE_QUARTERLY:
+                return 'addQuarter';
+
+            default:
+                return 'no-type';
+        }
     }
 
     private function getCalendarType(array $calendar): string
@@ -74,10 +88,11 @@ class PayrollCalendarService
         return now()->addMonth()->format('Y-m-d');
     }
 
-    private function buildPeriods($calendar)
+    private function buildCalendarPeriodStartDates($calendar)
     {
         $date = $this->getReferenceDate($calendar);
-
+        //dd($this->getCalendarType($calendar));
+        //dd($date);
         switch ($this->getCalendarType($calendar)) {
             case PayrollCalendar::CALENDARTYPE_WEEKLY:
                 return call_user_func_array([
@@ -85,17 +100,13 @@ class PayrollCalendarService
                     'weeksUntil',
                 ], [$this->getNextPaymentDate($calendar)]);
 
-                //return $date->range($this->getNextPaymentDate($calendar), );
-                //return
-
             case PayrollCalendar::CALENDARTYPE_FORTNIGHTLY:
             case PayrollCalendar::CALENDARTYPE_TWICEMONTHLY:
                 return call_user_func_array([
                     $date,
-                    'daysUntil',
+                    'fortnightUntil',
                 ], [
                     $this->getNextPaymentDate($calendar),
-                    14,
                 ]);
 
             case PayrollCalendar::CALENDARTYPE_MONTHLY:

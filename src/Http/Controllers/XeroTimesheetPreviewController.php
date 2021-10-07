@@ -31,8 +31,9 @@ class XeroTimesheetPreviewController extends Controller
                 ];
             }))
             ->with('xero_payroll_calendars', $this->service->getPayrollCalendarsFromConfiguration())
-            ->with('payroll_calendar', $request->input('payroll_calendar'))
-            ->with('payroll_calendar_periods', $this->service->generatePeriods($request->input('payroll_calendar')))
+            //->with('payroll_calendar', $request->input('payroll_calendar'))
+            ->with('payroll_calendar_periods', $this->service->generateCalendarPeriods($request->input('payroll_calendar')))
+            ->with('payroll_calendar_period', $request->input('payroll_calendar_period'))
         ;
     }
 }
