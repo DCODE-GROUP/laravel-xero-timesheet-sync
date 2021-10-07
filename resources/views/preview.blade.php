@@ -46,43 +46,34 @@
             </div>
 
             <footer>
-                <input type="submit" value="Sign up!" class="button success">
+                <input type="submit" value="@lang('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.buttons.preview_submit')" class="button success">
             </footer>
 
         </form>
     </div>
 
-    <div>
-        table here
-    </div>
+    @if ($displayPreview)
 
-    @if (!empty($periodSelectOptions))
+        <div>
 
-        {{ Form::open(['route' => ['admin.users.timesheets-summary', $user], 'method' => 'get']) }}
-        {{ Form::label('period', 'Select a pay period') }}
-        {{ Form::select('period', $periodSelectOptions, (isset($xeroTimesheet) ? $xeroTimesheet->id : null), [
-        'data-selectize',
-        'data-timesheets-summary-select',
-        'placeholder' => 'Browse or search for a pay period']) }}
-        {{ Form::close() }}
+            <form action="{{ route('xero_timesheet_sync.send-to-xero') }}" method="POST">
+                @csrf
 
-        @if (isset($leave) && $leave != null && $leave->count() > 0)
-            <br />
-            <hr />
-            <h4>Leave within this Period:</h4>
-            @foreach ($leave as $leaveItem)
-                <div>{{ $leaveItem->leaveTypeName }} ({{ $leaveItem->startDate }} - {{ $leaveItem->stopDate }}) {{ $leaveItem->totalHours }}hours ({{ $leaveItem->leaveStatus }})</div>
-            @endforeach
-            <br />
-            <br />
-        @endif
+                <input type="hidden" name="payroll_calendar" value="{{ request('payroll_calendar') }}">
+                <input type="hidden" name="user_id" value="{{ request('user_id') }}">
+                <input type="hidden" name="payroll_calendar_period" value="{{ request('payroll_calendar_period') }}">
+
+                <h2>@lang('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.phrases.total_period_hours') {{ $calendarName }}</h2>
+
+               @dd($timesheets)
+
+            </form>
+
+        </div>
 
         @isset($xeroTimesheet)
             <br />
-            <h2>
-                @lang('Total Hours For Week')
-                {{ $xeroTimesheet->totalUnits }}
-            </h2>
+
             {{ Form::open(['route' => ['admin.users.timesheets-summary.update-overrides', $user, $xeroTimesheet]]) }}
             <table>
                 <thead>

@@ -51,8 +51,12 @@ class PayrollCalendarService
         return $this->configurationPayrollCalendars;
     }
 
-    public function getCalendarName(string $payrollCalendarId)
+    public function getCalendarName(string $payrollCalendarId = null): string
     {
+        if (is_null($payrollCalendarId)) {
+            return '';
+        }
+
         return $this->getName($this->getCalendar($payrollCalendarId));
     }
 
@@ -171,8 +175,8 @@ class PayrollCalendarService
 
     private function getNextPaymentDate(array $calendar): string
     {
-        //return data_get($calendar, 'PaymentDate');
-        return now()->addMonth()->format('Y-m-d');
+        return data_get($calendar, 'PaymentDate');
+        //return now()->addMonth()->format('Y-m-d');
     }
 
     private function buildCalendarPeriodStartDates($calendar)

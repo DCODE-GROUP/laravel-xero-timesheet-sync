@@ -11,6 +11,10 @@ return [
         'payroll_calendar' => 'Payroll Calendar',
         'payroll_calendar_period' => 'Period',
         'user' => 'User',
-    ]
+    ],
+
+    'phrases' => [
+      'total_period_hours' => 'Total Hours For ',
+    ],
 
 ];

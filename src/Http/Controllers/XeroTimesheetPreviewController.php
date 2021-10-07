@@ -4,6 +4,7 @@ namespace Dcodegroup\LaravelXeroTimesheetSync\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet;
 use Dcodegroup\LaravelXeroTimesheetSync\Service\PayrollCalendarService;
 use Illuminate\Http\Request;
 
@@ -31,9 +32,16 @@ class XeroTimesheetPreviewController extends Controller
                 ];
             }))
             ->with('xero_payroll_calendars', $this->service->getPayrollCalendarsFromConfiguration())
-            //->with('payroll_calendar', $request->input('payroll_calendar'))
+            ->with('xero_timesheet', new XeroTimesheet)
+            ->with('timesheets', $this->service->retrieveUserTimeSheets($request->input('payroll_calendar_period'), $request->input('user_id')))
             ->with('payroll_calendar_periods', $this->service->generateCalendarPeriods($request->input('payroll_calendar')))
-            ->with('payroll_calendar_period', $request->input('payroll_calendar_period'))
-        ;
+            //->with('payroll_calendar_period', $request->input('payroll_calendar_period'))
+            ->with('displayPreview', $this->displayPreview($request))
+            ->with('calendarName', $this->service->getCalendarName($request->input('payroll_calendar')));
+    }
+
+    protected function displayPreview(Request $request): bool
+    {
+        return $request->filled('user_id') && $request->filled('payroll_calendar') && $request->filled('payroll_calendar_period');
     }
 }
