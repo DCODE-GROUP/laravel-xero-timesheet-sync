@@ -4,7 +4,6 @@ namespace Dcodegroup\LaravelXeroTimesheetSync\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Dcodegroup\LaravelConfiguration\Models\Configuration;
 use Dcodegroup\LaravelXeroTimesheetSync\Service\PayrollCalendarService;
 use Illuminate\Http\Request;
 
