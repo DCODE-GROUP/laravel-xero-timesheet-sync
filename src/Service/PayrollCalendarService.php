@@ -5,6 +5,7 @@ namespace Dcodegroup\LaravelXeroTimesheetSync\Service;
 use App\Models\Timesheet;
 use App\Models\User;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Dcodegroup\LaravelConfiguration\Models\Configuration;
 use Illuminate\Database\Eloquent\Builder;
 use XeroPHP\Models\PayrollAU\PayrollCalendar;
@@ -22,8 +23,29 @@ class PayrollCalendarService
         ;
     }
 
-    public function generatePeriodDays($startDate, $endDate)
+    public function generatePeriodDays(string $payrollCalendarPeriod = null)
     {
+        if (is_null($payrollCalendarPeriod)) {
+            return [];
+        }
+
+        [
+            $tmpStartDate,
+            $tmpEndDate,
+        ] = explode('||', $payrollCalendarPeriod);
+
+        $period = CarbonPeriod::create($tmpStartDate, '1 day', $tmpEndDate);
+
+        //dd($period);
+
+        $days = [];
+
+        //return $period
+        foreach ($period as $item) {
+            $days[$item->toDateString()] = $item->format('D jS M');
+        }
+
+        return $days;
     }
 
     public function generateCalendarPeriods(string $payrollCalendarId = null): array
@@ -60,19 +82,18 @@ class PayrollCalendarService
         return $this->getName($this->getCalendar($payrollCalendarId));
     }
 
-    public function retrieveUserTimeSheets(string $payrollCalendarPeriods = null, int $userId = null): array
+    public function retrieveUserTimeSheets(string $payrollCalendarPeriod = null, int $userId = null): array
     {
-        if (is_null($payrollCalendarPeriods) || is_null($userId)) {
+        if (is_null($payrollCalendarPeriod) || is_null($userId)) {
             return [];
         }
 
         $user = User::find($userId);
 
-        //dd($payrollCalendarPeriods);
         [
             $tmpStartDate,
             $tmpEndDate,
-        ] = explode('||', $payrollCalendarPeriods);
+        ] = explode('||', $payrollCalendarPeriod);
 
         $startDate = Carbon::parse($tmpStartDate)->startOfDay();
         $endDate = Carbon::parse($tmpEndDate)->endOfDay();
@@ -182,8 +203,6 @@ class PayrollCalendarService
     private function buildCalendarPeriodStartDates($calendar)
     {
         $date = $this->getReferenceDate($calendar);
-        //dd($this->getCalendarType($calendar));
-        //dd($date);
         switch ($this->getCalendarType($calendar)) {
             case PayrollCalendar::CALENDARTYPE_WEEKLY:
                 return call_user_func_array([

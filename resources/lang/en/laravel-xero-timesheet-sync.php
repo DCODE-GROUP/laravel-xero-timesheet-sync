@@ -17,4 +17,8 @@ return [
       'total_period_hours' => 'Total Hours For ',
     ],
 
+    'words' => [
+        'total' => 'Total'
+    ]
+
 ];

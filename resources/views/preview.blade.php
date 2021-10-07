@@ -65,7 +65,69 @@
 
                 <h2>@lang('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.phrases.total_period_hours') {{ $calendarName }}</h2>
 
-               @dd($timesheets)
+{{--               @dd($payroll_calendar_period_days)--}}
+{{--               @dd($timesheets)--}}
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th></th>
+                        @foreach($payroll_calendar_period_days as $day)
+                            <th>{{ $day }} </th>
+                        @endforeach
+                        <th>@lang('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.words.total')</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @php
+                        $totals = [];
+                    @endphp
+
+                    @foreach()
+
+                    @endforeach
+
+                    @foreach($xeroTimesheet->lines as $xeroTimesheetLine)
+                        <tr>
+                            <td>{{ $xeroTimesheetLine->earningsRateName }}</td>
+                            @foreach($xeroTimesheetLine->units as $unit)
+                                @php
+                                    if (empty ($totals[$unit->date])) {
+                                        $totals[$unit->date] = 0;
+                                    }
+                                    $totals[$unit->date] += ($unit->hasOverride ? $unit->override->units : $unit->units);
+                                @endphp
+                                <td valign="top">
+                                    {{
+                                        Form::number($unit->id, ($unit->hasOverride ? $unit->override->units : $unit->units),
+                                        ['step' => 'any', 'min' => 0, 'style' => 'width: 75px; '.($unit->hasOverride ? 'border:1px solid red' : null )])
+                                    }}
+                                    @if ($unit->hasOverride)
+                                        <button type="button" data-delete-override="{{ $unit->override->id }}"
+                                                class="ee-button -sml -solid-red"
+                                                title="Clear override">
+                                            &times;
+                                        </button>
+                                    @endif
+                                </td>
+                            @endforeach
+                            <td>
+                                {{ $xeroTimesheetLine->totalUnits }}
+                            </td>
+                        </tr>
+                    @endforeach
+
+                    <!-- Totals -->
+                    <tr>
+                        <td>Total</td>
+                        @foreach($xeroTimesheet->payPeriodDays as $day)
+                            <td style="text-align:left;">{{ $totals[$day->timestamp] ?? '0' }} </td>
+                        @endforeach
+                        <td>{{ $xeroTimesheet->totalUnits }}</td>
+                    </tr>
+
+                    </tbody>
+                </table>
 
             </form>
 
@@ -73,65 +135,6 @@
 
         @isset($xeroTimesheet)
             <br />
-
-            {{ Form::open(['route' => ['admin.users.timesheets-summary.update-overrides', $user, $xeroTimesheet]]) }}
-            <table>
-                <thead>
-                <tr>
-                    <th></th>
-                    @foreach($xeroTimesheet->payPeriodDays as $day)
-                        <th>{{ $day->format('D jS') }} </th>
-                    @endforeach
-                    <th>@lang('Total')</th>
-                </tr>
-                </thead>
-                <tbody>
-                @php
-                    $totals = [];
-                @endphp
-                @foreach($xeroTimesheet->lines as $xeroTimesheetLine)
-                    <tr>
-                        <td>{{ $xeroTimesheetLine->earningsRateName }}</td>
-                        @foreach($xeroTimesheetLine->units as $unit)
-                            @php
-                                if (empty ($totals[$unit->date])) {
-                                    $totals[$unit->date] = 0;
-                                }
-                                $totals[$unit->date] += ($unit->hasOverride ? $unit->override->units : $unit->units);
-                            @endphp
-                            <td valign="top">
-                                {{
-                                    Form::number($unit->id, ($unit->hasOverride ? $unit->override->units : $unit->units),
-                                    ['step' => 'any', 'min' => 0, 'style' => 'width: 75px; '.($unit->hasOverride ? 'border:1px solid red' : null )])
-                                }}
-                                @if ($unit->hasOverride)
-                                    <button type="button" data-delete-override="{{ $unit->override->id }}"
-                                            class="ee-button -sml -solid-red"
-                                            title="Clear override">
-                                        &times;
-                                    </button>
-                                @endif
-                            </td>
-                        @endforeach
-                        <td>
-                            {{ $xeroTimesheetLine->totalUnits }}
-                        </td>
-                    </tr>
-                @endforeach
-
-                <!-- Totals -->
-                <tr>
-                    <td>Total</td>
-                    @foreach($xeroTimesheet->payPeriodDays as $day)
-                        <td style="text-align:left;">{{ $totals[$day->timestamp] ?? '0' }} </td>
-                    @endforeach
-                    <td>{{ $xeroTimesheet->totalUnits }}</td>
-                </tr>
-
-                </tbody>
-            </table>
-            {{ Form::submit('Update timesheet overrides', ['class' => 'ee-button -med -solid-green']) }}
-            {{ Form::close() }}
 
             @foreach($xeroTimesheet->units as $unit)
                 @if ($unit->hasOverride)
