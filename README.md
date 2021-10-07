@@ -36,13 +36,15 @@ xero_timesheet_id unsignedbigint(255) FK >- xero_timesheets.id
 xero_timesheets
 ---
 id bigint(20) PK IDENTITY
-xero_timesheetabe_type varchar(255)
-xero_timesheetabe_id unsignedbigint
+xerotimeable_type varchar(255)
+xerotimeable_id unsignedbigint
+xero_timesheet_guid varchar(50) NULL # The identifier returned from xero
 xero_employee_id varchar(50) NULL # may be redundant becuase its on the user that should be the polymporphic field. But saves a lookup
 status varchar(50) NULL DEFAULT=DRAFT
 start_date date
 stop_date date
 hours double(8,2)
+synced_at timestamp NULL
 deleted_at timestamp NULL
 created_at timestamp NULL
 updated_at timestamp NULL
@@ -50,7 +52,8 @@ updated_at timestamp NULL
 xero_timesheets_lines
 ---
 id bigint(20) PK IDENTITY
-xero_timesheet_id NULL
+xero_timesheet_id unsignedbigint(255) FK >- xero_timesheets.id
+xero-earnings_rate_id
 date date
 units double(8,2)
 units_override double(8,2)
@@ -150,4 +153,52 @@ Three helper methods are provided in the `XeroTimesheetable.php` trait.
         $this->can_include_in_xero_sync = !$this->can_include_in_xero_sync;
         $this->save();
     }
+```
+
+## Routes
+
+The following routes are exposed by the package
+
+```
++--------+----------+-----------------------------+-----------------------------+-------------------------------------------------------------------------------------+----------------------------------+
+| Domain | Method   | URI                         | Name                        | Action                                                                              | Middleware                       |
++--------+----------+-----------------------------+-----------------------------+-------------------------------------------------------------------------------------+----------------------------------+
+|        | GET|HEAD | xero-timesheet-sync/preview | xero_timesheet_sync.preview | Dcodegroup\LaravelXeroTimesheetSync\Http\Controllers\XeroTimesheetPreviewController | web                              |
+|        |          |                             |                             |                                                                                     | App\Http\Middleware\Authenticate |
+|        | GET|HEAD | xero-timesheet-sync/summary | xero_timesheet_sync.summary | Dcodegroup\LaravelXeroTimesheetSync\Http\Controllers\XeroTimesheetSummaryController | web                              |
+|        |          |                             |                             |                                                                                     | App\Http\Middleware\Authenticate |
++--------+----------+-----------------------------+-----------------------------+-------------------------------------------------------------------------------------+----------------------------------+
+
+
+```
+
+The package exposes some routes that allow you preview timesheets for a user
+
+You can also view a summary of the timesheets for a period
+
+## Jobs
+
+## Commands
+
+There is a command you can run to update the Xero configurations from `dcodegroup/laravel-xero-payroll-au` via Laravels scheduler
+
+```bash
+php artsian laravel-xero-timesheet-sync:update-xero-configuration-data
+```
+
+You should add it to your `app/Console/Kernel.php` file to run it once a day. You could run it more often if wanted with the --force flag
+
+```php
+    /**
+     * Define the application's command schedule.
+     *
+     * @param Schedule $schedule
+     * @return void
+     */
+    protected function schedule(Schedule $schedule)
+    {
+        $schedule->command('laravel-xero-timesheet-sync:update-xero-configuration-data')->daily();    
+        ...
+    }
+
 ```
