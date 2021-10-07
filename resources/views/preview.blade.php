@@ -5,7 +5,7 @@
 
     <div>
         <form action="{{ route('xero_timesheet_sync.preview') }}" method="GET">
-            @csrf
+{{--            @csrf--}}
 
             <div>
                 <label for="payroll_calendar">@lang('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.labels.payroll_calendar'): </label>
