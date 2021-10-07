@@ -101,21 +101,21 @@ class PayrollCalendarService
         return Timesheet::query()
                         ->whereDate('start', '>=', $startDate)
                         ->whereDate('stop', '<=', $endDate)
-                        ->whereHasMorph('timesheetable', [User::class], fn(Builder $builder) => $builder->where('id', $user->id))
+                        ->whereHasMorph('timesheetable', [User::class], fn (Builder $builder) => $builder->where('id', $user->id))
                         ->get()
                         ->map(function ($timesheet) {
                             if ($timesheet->start->toDateString() != $timesheet->stop->toDateString()) {
                                 return [
                                     [
                                         // before midnight
-                                        'date'  => $timesheet->start->toDateString(),
+                                        'date' => $timesheet->start->toDateString(),
                                         'units' => round($timesheet->start->floatDiffInHours($timesheet->start->copy()
                                                                                                               ->endOfDay()
                                                                                                               ->addSecond()), 2),
                                     ],
                                     [
                                         // after midnight
-                                        'date'  => $timesheet->stop->toDateString(),
+                                        'date' => $timesheet->stop->toDateString(),
                                         'units' => round($timesheet->stop->floatDiffInHours($timesheet->stop->copy()
                                                                                                             ->startOfDay()), 2),
                                     ],
@@ -123,7 +123,7 @@ class PayrollCalendarService
                             }
 
                             return [
-                                'date'  => $timesheet->start->toDateString(),
+                                'date' => $timesheet->start->toDateString(),
                                 'units' => $timesheet->units,
                             ];
                         })
@@ -246,7 +246,7 @@ class PayrollCalendarService
         $model = XeroTimesheet::query()
                               ->whereDate('start', '>=', $startDate)
                               ->whereDate('stop', '<=', $endDate)
-                              ->whereHasMorph('xerotimeable', [User::class], fn(Builder $builder) => $builder->where('id', $user->id))
+                              ->whereHasMorph('xerotimeable', [User::class], fn (Builder $builder) => $builder->where('id', $user->id))
                               ->first();
 
         if ($model instanceof XeroTimesheet) {
@@ -259,8 +259,8 @@ class PayrollCalendarService
     private function generateDraftTimesheet(string $startDate, string $endDate, User $user): XeroTimesheet
     {
         $xeroTimesheet = $user->xerotimeable()->create([
-                                                 'start_date'       => $startDate,
-                                                 'end_date'         => $endDate,
+                                                 'start_date' => $startDate,
+                                                 'end_date' => $endDate,
                                                  'xero_employee_id' => $user->xero_employee_id,
                                              ]);
 
@@ -272,6 +272,5 @@ class PayrollCalendarService
 
     private function generateInitialTimesheetRows(XeroTimesheet $xeroTimesheet)
     {
-
     }
 }
