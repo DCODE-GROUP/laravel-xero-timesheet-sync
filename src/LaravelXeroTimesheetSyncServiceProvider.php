@@ -44,7 +44,7 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
         $this->publishes([__DIR__.'/../config/laravel-xero-timesheet-sync.php' => config_path('laravel-xero-timesheet-sync.php')], 'laravel-xero-timesheet-sync-config');
 
         if (Schema::hasTable('timesheets')
-            && !Schema::hasColumns('timesheets', [
+            && ! Schema::hasColumns('timesheets', [
                 'can_include_in_xero_sync',
                 'units',
                 'xero_timesheet_id',
@@ -56,7 +56,7 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
             ], 'laravel-xero-timesheet-sync-timesheet-table-migrations');
         }
 
-        if (!Schema::hasTable('xero_timesheets')) {
+        if (! Schema::hasTable('xero_timesheets')) {
             $timestamp = date('Y_m_d_His', time());
 
             $this->publishes([
@@ -64,7 +64,7 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
             ], 'laravel-xero-timesheet-sync-timesheet-table-migrations');
         }
 
-        if (!Schema::hasTable('xero_timesheet_lines')) {
+        if (! Schema::hasTable('xero_timesheet_lines')) {
             $timestamp = date('Y_m_d_His', time());
 
             $this->publishes([
@@ -95,7 +95,7 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
             'as' => Str::slug(config('laravel-xero-timesheet-sync.as'), '_').'.',
             'middleware' => config('laravel-xero-timesheet-sync.middleware', 'web'),
         ], function () {
-                         $this->loadRoutesFrom(__DIR__.'/../routes/laravel_xero_timesheet_sync.php');
-                     });
+            $this->loadRoutesFrom(__DIR__.'/../routes/laravel_xero_timesheet_sync.php');
+        });
     }
 }
