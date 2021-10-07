@@ -25,7 +25,7 @@
     }
   ],
   "require": {
-    "php": "^7.4|^8.0",
+    "php": "^8.0",
     "dcodegroup/laravel-xero-payroll-au": "^0.1",
     "dcodegroup/laravel-timesheets": "^0.1",
     "dcodegroup/laravel-xero-oauth": "^1.0",
