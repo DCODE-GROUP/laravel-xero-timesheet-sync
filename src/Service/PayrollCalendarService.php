@@ -298,7 +298,6 @@ class PayrollCalendarService
 
         foreach ($earningRates as $rate) {
             foreach ($days as $key => $label) {
-
                 $units = 0;
 
                 if ($rate['key'] == 'xero_default_ordinary_earnings_rate_id' && isset($timesheets[$key]['units'])) {
@@ -311,7 +310,7 @@ class PayrollCalendarService
                     'xero_earnings_rate_id' => $rate['value'],
                     'date' => $key,
                     'units' => $units,
-                    'units_override' =>$units,
+                    'units_override' => $units,
                 ]);
             }
         }
