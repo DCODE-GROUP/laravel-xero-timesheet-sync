@@ -37,4 +37,11 @@ class XeroTimesheet extends Model
     {
         return $this->hasMany(XeroTimesheetLine::class);
     }
+
+    //public function buildTimesheetSummaryFormData()
+    //{
+    //    return $this->lines->map(function ($item) {
+    //
+    //    });
+    //}
 }

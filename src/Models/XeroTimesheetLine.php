@@ -24,4 +24,16 @@ class XeroTimesheetLine extends Model
     protected $casts = [
         'date' => 'date',
     ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['summary_form_key'];
+
+    public function getSummaryFormKeyAttribute()
+    {
+        return $this->earnings_rate_configuration_key . '_'. $this->date->toDateString();
+    }
 }

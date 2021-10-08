@@ -69,15 +69,18 @@ class PayrollCalendarService
         $configurations = Configuration::byGroup('xero_payroll_au')->get();
 
         return [
-            'xero_default_ordinary_earnings_rate_id' => [
+            [
+                'key' => 'xero_default_ordinary_earnings_rate_id',
                 'name' => $configurations->where('key', 'xero_default_ordinary_earnings_rate_id')->pluck('name')->first(),
                 'value' => $configurations->where('key', 'xero_default_ordinary_earnings_rate_id')->pluck('value')->first(),
             ],
-            'xero_default_time_and_a_half' => [
+            [
+                'key' => 'xero_default_time_and_a_half',
                 'name' => $configurations->where('key', 'xero_default_time_and_a_half')->pluck('name')->first(),
                 'value' => $configurations->where('key', 'xero_default_time_and_a_half')->pluck('value')->first(),
             ],
-            'xero_default_double_time' => [
+            [
+                'key' => 'xero_default_double_time',
                 'name' => $configurations->where('key', 'xero_default_double_time')->pluck('name')->first(),
                 'value' => $configurations->where('key', 'xero_default_double_time')->pluck('value')->first(),
             ],
@@ -291,15 +294,24 @@ class PayrollCalendarService
         $days = $this->periodDayGenerator($startDate, $endDate);
         $earningRates = $this->getXeroEarningRates();
         $timesheets = $this->retrieveUserTimeSheets($startDate, $endDate, $user);
+        $defaultEarningsRateId = Configuration::byKey('xero_default_ordinary_earnings_rate_id')->first()->pluck('value')->first();
 
         foreach ($earningRates as $rate) {
             foreach ($days as $key => $label) {
+
+                $units = 0;
+
+                if ($rate['key'] == 'xero_default_ordinary_earnings_rate_id' && isset($timesheets[$key]['units'])) {
+                    $units = $timesheets[$key]['units'];
+                }
+
                 XeroTimesheetLine::create([
                     'xero_timesheet_id' => $xeroTimesheet->id,
+                    'earnings_rate_configuration_key' => $rate['key'],
                     'xero_earnings_rate_id' => $rate['value'],
                     'date' => $key,
-                    'units' => $timesheets[$key]['units'] ?? 0,
-                    'units_override' => $timesheets[$key]['units'] ?? 0,
+                    'units' => $units,
+                    'units_override' =>$units,
                 ]);
             }
         }
