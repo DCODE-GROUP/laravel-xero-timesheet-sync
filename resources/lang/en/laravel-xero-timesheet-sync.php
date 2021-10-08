@@ -4,7 +4,8 @@ return [
     'buttons' => [
         'preview' => 'Preview Timesheets',
         'summary' => 'Summary',
-        'preview_submit' => 'Lookup'
+        'preview_submit' => 'Lookup',
+        'submit_to_xero' => 'Send to Xero',
     ],
 
     'labels' => [
@@ -14,11 +15,10 @@ return [
     ],
 
     'phrases' => [
-      'total_period_hours' => 'Total Hours For ',
+        'total_period_hours' => 'Total Hours For ',
     ],
 
     'words' => [
-        'total' => 'Total'
-    ]
-
+        'total' => 'Total',
+    ],
 ];
