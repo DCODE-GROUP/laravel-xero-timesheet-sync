@@ -12,6 +12,7 @@ class CreateXeroTimesheetLinesTable extends Migration
         Schema::create('xero_timesheet_lines', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(XeroTimesheet::class);
+            $table->string('earnings_rate_configuration_key');
             $table->string('xero_earnings_rate_id', 50);
             $table->string('xero_tracking_item_id', 50)->nullable()->comment('rarely used but just in case its needed');
             $table->date('date');
