@@ -26,7 +26,7 @@ class XeroTimesheetPreviewController extends Controller
         $xeroTimesheet = $this->service->findOrderCreateXeroTimesheet($request->input('payroll_calendar_period'), $request->input('user_id'));
 
         return view('xero-timesheet-sync-views::preview')
-            ->with('users', User::all()->map(function ($user) {
+            ->with('users', User::hasXeroEmployeeId()->get()->map(function ($user) {
                 return [
                     'value' => $user->id,
                     'label' => $user->xero_employee_name,

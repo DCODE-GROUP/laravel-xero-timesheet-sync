@@ -3,26 +3,19 @@
 namespace Dcodegroup\LaravelXeroTimesheetSync\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Dcodegroup\LaravelXeroTimesheetSync\Service\PayrollCalendarService;
-use Illuminate\Http\Request;
+use Dcodegroup\LaravelXeroTimesheetSync\Http\Requests\SendToXeroRequest;
+use Dcodegroup\LaravelXeroTimesheetSync\Jobs\SendTimesheetToXero;
+use Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet;
 
 class SendToXeroController extends Controller
 {
-    protected PayrollCalendarService $service;
-
-    public function __construct(PayrollCalendarService $service)
+    public function __invoke(SendToXeroRequest $request, XeroTimesheet $xeroTimesheet)
     {
-        $this->service = $service;
-    }
+        SendTimesheetToXero::dispatch($xeroTimesheet);
 
-    public function __invoke(Request $request)
-    {
-
-        // dispatch send to xero
-
-        return response()->redirect('xero_timesheet_sync.preview ', ['user_id' => $request->input('user_id'),
-                                                                     'payroll_calendar' => $request->input('payroll_calendar'),
-                                                                     'payroll_calendar_period' => $request->input('payroll_calendar_period'),
+        return redirect()->route('xero_timesheet_sync.preview', ['user_id' => $request->input('user_id'),
+            'payroll_calendar' => $request->input('payroll_calendar'),
+            'payroll_calendar_period' => $request->input('payroll_calendar_period'),
         ]);
     }
 }

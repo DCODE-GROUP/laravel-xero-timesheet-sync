@@ -294,7 +294,6 @@ class PayrollCalendarService
         $days = $this->periodDayGenerator($startDate, $endDate);
         $earningRates = $this->getXeroEarningRates();
         $timesheets = $this->retrieveUserTimeSheets($startDate, $endDate, $user);
-        $defaultEarningsRateId = Configuration::byKey('xero_default_ordinary_earnings_rate_id')->first()->pluck('value')->first();
 
         foreach ($earningRates as $rate) {
             foreach ($days as $key => $label) {

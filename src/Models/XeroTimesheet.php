@@ -25,7 +25,7 @@ class XeroTimesheet extends Model
      */
     protected $casts = [
         'start_date' => 'date',
-        'stop_dte' => 'date',
+        'end_date' => 'date',
     ];
 
     public function xerotimeable(): MorphTo
@@ -38,10 +38,19 @@ class XeroTimesheet extends Model
         return $this->hasMany(XeroTimesheetLine::class);
     }
 
-    //public function buildTimesheetSummaryFormData()
-    //{
-    //    return $this->lines->map(function ($item) {
-    //
-    //    });
-    //}
+    public function hasXeroGuid(): bool
+    {
+        return !empty($this->xero_timesheet_guid);
+    }
+
+    public function prepareTimesheetLines()
+    {
+        return $this->lines()->get()->groupBy('earnings_rate_configuration_key')->map(function ($earningRate) {
+            return [
+                'EarningsRateID' => $earningRate->first()->pluck('xero_earnings_rate_id'),
+                'TrackingItemID' => $earningRate->first()->pluck('xero_tracking_item_id'),
+                'NumberOfUnits' => $earningRate->sortBy('date')->pluck('units_override')->toArray()
+            ];
+        })->values()->toArray();
+    }
 }

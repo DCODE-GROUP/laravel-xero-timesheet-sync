@@ -3,11 +3,8 @@
 @section('content')
 <div>
 
-{{--    @dd($payroll_calendar_periods);--}}
-
     <div>
         <form action="{{ route('xero_timesheet_sync.preview') }}" method="GET">
-{{--            @csrf--}}
 
             <div>
                 <label for="payroll_calendar">@lang('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.labels.payroll_calendar'): </label>
@@ -56,13 +53,15 @@
 
         <div>
 
-            <form action="{{ route('xero_timesheet_sync.send-to-xero') }}" method="POST">
+{{--            @dd($xeroTimesheet->prepareTimesheetLines());--}}
+
+            <form action="{{ route('xero_timesheet_sync.send-to-xero', $xeroTimesheet) }}" method="POST">
                 @csrf
 
                 <input type="hidden" name="payroll_calendar" value="{{ request('payroll_calendar') }}">
                 <input type="hidden" name="user_id" value="{{ request('user_id') }}">
                 <input type="hidden" name="payroll_calendar_period" value="{{ request('payroll_calendar_period') }}">
-                <input type="hidden" name="xero_timesheet_id" value="{{ $xeroTimesheet->id }}">
+{{--                <input type="hidden" name="xero_timesheet_id" value="{{ $xeroTimesheet->id }}">--}}
 
                 <h2>@lang('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.phrases.total_period_hours') {{ $calendarName }}</h2>
 
