@@ -5,17 +5,15 @@ namespace Dcodegroup\LaravelXeroTimesheetSync;
 use Dcodegroup\LaravelXeroOauth\BaseXeroService;
 use Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet;
 use XeroPHP\Models\PayrollAU\Timesheet;
-use XeroPHP\Remote\Exception\BadRequestException;
 
 class BaseXeroTimesheetSyncService extends BaseXeroService
 {
     public function updateXeroTimesheet(XeroTimesheet $xeroTimesheet)
     {
-
         $timesheetParameters = [
         'EmployeeID' => $xeroTimesheet->xero_employee_id,
-        'StartDate'  => $xeroTimesheet->start_date,
-        'EndDate'    => $xeroTimesheet->end_date,
+        'StartDate' => $xeroTimesheet->start_date,
+        'EndDate' => $xeroTimesheet->end_date,
     ];
 
         if ($xeroTimesheet->hasXeroGuid()) {
@@ -23,6 +21,5 @@ class BaseXeroTimesheetSyncService extends BaseXeroService
         } else {
             $response = $this->saveModel(Timesheet::class, $timesheetParameters, $xeroTimesheet->prepareTimesheetLines());
         }
-
     }
 }

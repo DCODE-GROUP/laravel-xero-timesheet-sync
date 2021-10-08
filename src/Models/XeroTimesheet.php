@@ -40,7 +40,7 @@ class XeroTimesheet extends Model
 
     public function hasXeroGuid(): bool
     {
-        return !empty($this->xero_timesheet_guid);
+        return ! empty($this->xero_timesheet_guid);
     }
 
     public function prepareTimesheetLines()
@@ -49,7 +49,7 @@ class XeroTimesheet extends Model
             return [
                 'EarningsRateID' => $earningRate->first()->pluck('xero_earnings_rate_id'),
                 'TrackingItemID' => $earningRate->first()->pluck('xero_tracking_item_id'),
-                'NumberOfUnits' => $earningRate->sortBy('date')->pluck('units_override')->toArray()
+                'NumberOfUnits' => $earningRate->sortBy('date')->pluck('units_override')->toArray(),
             ];
         })->values()->toArray();
     }
