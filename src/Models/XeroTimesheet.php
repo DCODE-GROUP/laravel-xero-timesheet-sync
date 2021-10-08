@@ -28,13 +28,13 @@ class XeroTimesheet extends Model
         'stop_dte' => 'date',
     ];
 
-    public function xerotimeeable(): MorphTo
+    public function xerotimeable(): MorphTo
     {
         return $this->morphTo();
     }
 
     public function lines(): HasMany
     {
-        return $this->hasMany(XeroTimesheetLines::class);
+        return $this->hasMany(XeroTimesheetLine::class);
     }
 }

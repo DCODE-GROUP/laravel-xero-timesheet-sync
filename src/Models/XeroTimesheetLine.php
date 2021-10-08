@@ -5,7 +5,7 @@ namespace Dcodegroup\LaravelXeroTimesheetSync\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class XeroTimesheetLines extends Model
+class XeroTimesheetLine extends Model
 {
     use HasFactory;
 

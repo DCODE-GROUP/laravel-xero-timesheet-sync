@@ -16,7 +16,7 @@ class CreateXeroTimesheetsTable extends Migration
             $table->string('status', 50)->default('DRAFT')->nullable();
             $table->date('start_date');
             $table->date('end_date');
-            $table->double('hours', 8, 2);
+            $table->double('hours', 8, 2)->default(0);
             $table->timestamp('synced_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
