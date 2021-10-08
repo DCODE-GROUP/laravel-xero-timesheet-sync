@@ -152,7 +152,7 @@ class PayrollCalendarService
 
         $user = User::find($userId);
 
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             return false;
         }
 
