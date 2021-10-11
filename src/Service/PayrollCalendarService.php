@@ -50,7 +50,7 @@ class PayrollCalendarService
         $calendarPeriodStarts = $this->buildCalendarPeriodStartDates($calendar);
 
         return collect($calendarPeriodStarts)->map(function ($periodStart) use ($calendar) {
-            $periodEnd = $periodStart->copy()->{$this->getMethodForCalendarType($calendar)}();
+            $periodEnd = $periodStart->copy()->{$this->getMethodForCalendarType($calendar)}()->subDay();
 
             return [
                 'value' => $periodStart->toDateString().'||'.$periodEnd->toDateString(),

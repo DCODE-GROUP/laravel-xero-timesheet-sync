@@ -23,6 +23,8 @@ class XeroTimesheetLine extends Model
      */
     protected $casts = [
         'date' => 'date',
+        'units' => 'double',
+        'units_override' => 'double',
     ];
 
     /**

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
+use XeroPHP\Models\PayrollAU\Timesheet\TimesheetLine;
 
 class XeroTimesheet extends Model
 {
@@ -42,24 +43,28 @@ class XeroTimesheet extends Model
 
     public function hasXeroGuid(): bool
     {
-        return ! empty($this->xero_timesheet_guid);
+        return !empty($this->xero_timesheet_guid);
     }
 
     public function prepareTimesheetLines(): array
     {
         return $this->lines()->get()->groupBy('earnings_rate_configuration_key')->map(function ($earningRate) {
-            return [
-                'EarningsRateID' => $earningRate->first()->pluck('xero_earnings_rate_id'),
-                'TrackingItemID' => $earningRate->first()->pluck('xero_tracking_item_id'),
-                'NumberOfUnits' => $earningRate->sortBy('date')->pluck('units_override')->toArray(),
-            ];
+            $line = new TimesheetLine();
+            $line->setEarningsRateID($earningRate->first()->xero_earnings_rate_id);
+            $line->setTrackingItemID($earningRate->first()->xero_tracking_item_id);
+
+            $earningRate->sortBy('date')->each(function ($item) use ($line) {
+                $line->addNumberOfUnit(number_format((float) $item->units_override, 2, '.', ''));
+            });
+
+            return ['TimesheetLine' => $line];
         })->values()->toArray();
     }
 
     public function updateLines(Request $request)
     {
         $this->lines()->get()->each(function ($line) use ($request) {
-            $line->update(['units_override' => $request->input('xero_timesheet_line_id_' . $line->id)]);
+            $line->update(['units_override' => $request->input('xero_timesheet_line_id_'.$line->id)]);
         });
 
         SendTimesheetToXero::dispatch($this->fresh());
