@@ -4,6 +4,7 @@ namespace Dcodegroup\LaravelXeroTimesheetSync\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet;
 use Dcodegroup\LaravelXeroTimesheetSync\Service\PayrollCalendarService;
 use Illuminate\Http\Request;
 
@@ -24,6 +25,11 @@ class XeroTimesheetPreviewController extends Controller
     public function __invoke(Request $request)
     {
         $xeroTimesheet = $this->service->findOrderCreateXeroTimesheet($request->input('payroll_calendar_period'), $request->input('user_id'));
+        $xeroTimesheetLines = collect([]);
+
+        if ($xeroTimesheet instanceof XeroTimesheet) {
+            $xeroTimesheetLines = $xeroTimesheet->lines()->get();
+        }
 
         return view('xero-timesheet-sync-views::preview')
             ->with('users', User::hasXeroEmployeeId()->get()->map(function ($user) {
@@ -38,7 +44,7 @@ class XeroTimesheetPreviewController extends Controller
             ->with('displayPreview', $this->displayPreview($request))
             ->with('calendarName', $this->service->getCalendarName($request->input('payroll_calendar')))
             ->with('xeroTimesheet', $xeroTimesheet)
-            ->with('xeroTimesheetLines', $xeroTimesheet->lines()->get())
+            ->with('xeroTimesheetLines', $xeroTimesheetLines)
             ->with('earningRates', $this->service->getXeroEarningRates());
     }
 
