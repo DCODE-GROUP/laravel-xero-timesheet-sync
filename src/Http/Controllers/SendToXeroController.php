@@ -3,7 +3,6 @@
 namespace Dcodegroup\LaravelXeroTimesheetSync\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Dcodegroup\LaravelXeroTimesheetSync\BaseXeroTimesheetSyncService;
 use Dcodegroup\LaravelXeroTimesheetSync\Http\Requests\SendToXeroRequest;
 use Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet;
 
