@@ -9,7 +9,7 @@
             <div>
                 <label for="payroll_calendar">@lang('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.labels.payroll_calendar'): </label>
                 <select name="payroll_calendar" id="payroll_calendar" onchange="this.form.submit()">
-                    @foreach($xero_payroll_calendars as $calendar)
+                    @foreach($xeroPayrollCalendars as $calendar)
                         <option value="{{ data_get($calendar, 'PayrollCalendarID') }}" {{ data_get($calendar, 'PayrollCalendarID') == request('payroll_calendar') ? ' selected' : '' }}>{{ data_get($calendar, 'Name') }}</option>
                     @endforeach
                 </select>
@@ -21,7 +21,7 @@
             <div>
                 <label for="payroll_calendar_period">@lang('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.labels.payroll_calendar'): </label>
                 <select name="payroll_calendar_period" id="payroll_calendar_period" onchange="this.form.submit()">
-                    @foreach($payroll_calendar_periods as $period)
+                    @foreach($payrollCalendarPeriods as $period)
                         <option value="{{ data_get($period, 'value') }}" {{ data_get($period, 'value') == request('payroll_calendar_period') ? ' selected' : '' }}>{{ data_get($period, 'label') }}</option>
                     @endforeach
                 </select>
@@ -54,6 +54,7 @@
         <div>
 
 {{--            @dd($xeroTimesheet->prepareTimesheetLines());--}}
+{{--            @dd($xeroTimesheetLines);--}}
 
             <form action="{{ route('xero_timesheet_sync.send-to-xero', $xeroTimesheet) }}" method="POST">
                 @csrf
@@ -61,7 +62,6 @@
                 <input type="hidden" name="payroll_calendar" value="{{ request('payroll_calendar') }}">
                 <input type="hidden" name="user_id" value="{{ request('user_id') }}">
                 <input type="hidden" name="payroll_calendar_period" value="{{ request('payroll_calendar_period') }}">
-{{--                <input type="hidden" name="xero_timesheet_id" value="{{ $xeroTimesheet->id }}">--}}
 
                 <h2>@lang('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.phrases.total_period_hours') {{ $calendarName }}</h2>
 
@@ -69,7 +69,7 @@
                     <thead>
                     <tr>
                         <th></th>
-                        @foreach($payroll_calendar_period_days as $day)
+                        @foreach($payrollCalendarPeriodDays as $day)
                             <th>{{ $day }} </th>
                         @endforeach
                         <th>@lang('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.words.total')</th>
@@ -80,7 +80,7 @@
                     @foreach($earningRates as $rate)
                         <tr>
                             <td>{{ $rate['name'] }}</td>
-                            @foreach($payroll_calendar_period_days as $key => $value)
+                            @foreach($payrollCalendarPeriodDays as $key => $value)
                                 <td>
                                     <small class="original-units">
                                     {{ data_get($xeroTimesheetLines->where('summary_form_key', $rate['key'].'_'.$key)->first()->toArray(), 'units') }}
@@ -88,7 +88,7 @@
 
                                     <input
                                             type="number"
-                                            name="units_override_{{ $rate['key'] }}_{{ $key }}"
+                                            name="xero_timesheet_line_id_{{ data_get($xeroTimesheetLines->where('summary_form_key', $rate['key'].'_'.$key)->first()->toArray(), 'id') }}"
                                             step="0.1"
                                             value="{{ data_get($xeroTimesheetLines->where('summary_form_key', $rate['key'].'_'.$key)->first()->toArray(), 'units_override') }}">
 
@@ -107,7 +107,7 @@
 
                     <tfoot>
                     <tr>
-                        <td colspan="{{ (count($payroll_calendar_period_days) + 2) }}"><input type="submit" value="@lang('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.buttons.submit_to_xero')" class="button success"></td>
+                        <td colspan="{{ (count($payrollCalendarPeriodDays) + 2) }}"><input type="submit" value="@lang('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.buttons.submit_to_xero')" class="button success"></td>
                     </tr>
                     </tfoot>
                 </table>
