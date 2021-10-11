@@ -32,8 +32,8 @@ class XeroTimesheetLine extends Model
      */
     protected $appends = ['summary_form_key'];
 
-    public function getSummaryFormKeyAttribute()
+    public function getSummaryFormKeyAttribute(): string
     {
-        return $this->earnings_rate_configuration_key . '_'. $this->date->toDateString();
+        return $this->earnings_rate_configuration_key.'_'.$this->date->toDateString();
     }
 }
