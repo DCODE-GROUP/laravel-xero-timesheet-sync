@@ -3,15 +3,17 @@
 namespace Dcodegroup\LaravelXeroTimesheetSync\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Dcodegroup\LaravelXeroTimesheetSync\BaseXeroTimesheetSyncService;
 use Dcodegroup\LaravelXeroTimesheetSync\Http\Requests\SendToXeroRequest;
-use Dcodegroup\LaravelXeroTimesheetSync\Jobs\SendTimesheetToXero;
 use Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet;
 
 class SendToXeroController extends Controller
 {
     public function __invoke(SendToXeroRequest $request, XeroTimesheet $xeroTimesheet)
     {
-        SendTimesheetToXero::dispatch($xeroTimesheet);
+        $xeroTimesheet->updateLines($request);
+
+
 
         return redirect()->route('xero_timesheet_sync.preview', ['user_id' => $request->input('user_id'),
             'payroll_calendar' => $request->input('payroll_calendar'),
