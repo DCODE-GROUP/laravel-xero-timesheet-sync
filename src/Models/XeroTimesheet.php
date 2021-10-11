@@ -2,10 +2,12 @@
 
 namespace Dcodegroup\LaravelXeroTimesheetSync\Models;
 
+use Dcodegroup\LaravelXeroTimesheetSync\Jobs\SendTimesheetToXero;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Http\Request;
 
 class XeroTimesheet extends Model
 {
@@ -43,7 +45,7 @@ class XeroTimesheet extends Model
         return ! empty($this->xero_timesheet_guid);
     }
 
-    public function prepareTimesheetLines()
+    public function prepareTimesheetLines(): array
     {
         return $this->lines()->get()->groupBy('earnings_rate_configuration_key')->map(function ($earningRate) {
             return [
@@ -52,5 +54,14 @@ class XeroTimesheet extends Model
                 'NumberOfUnits' => $earningRate->sortBy('date')->pluck('units_override')->toArray(),
             ];
         })->values()->toArray();
+    }
+
+    public function updateLines(Request $request)
+    {
+        $this->lines()->get()->each(function ($line) use ($request) {
+            $line->update(['units_override' => $request->input('xero_timesheet_line_id_' . $line->id)]);
+        });
+
+        SendTimesheetToXero::dispatch($this->fresh());
     }
 }
