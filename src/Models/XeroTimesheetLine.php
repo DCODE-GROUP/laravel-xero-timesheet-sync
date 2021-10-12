@@ -4,6 +4,7 @@ namespace Dcodegroup\LaravelXeroTimesheetSync\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class XeroTimesheetLine extends Model
 {
@@ -28,11 +29,23 @@ class XeroTimesheetLine extends Model
     ];
 
     /**
+     * All of the relationships to be touched.
+     *
+     * @var array
+     */
+    protected $touches = ['timesheet'];
+
+    /**
      * The accessors to append to the model's array form.
      *
      * @var array
      */
     protected $appends = ['summary_form_key'];
+
+    public function timesheet(): BelongsTo
+    {
+        return $this->belongsTo(XeroTimesheet::class);
+    }
 
     public function getSummaryFormKeyAttribute(): string
     {

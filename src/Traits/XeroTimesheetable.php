@@ -2,7 +2,9 @@
 
 namespace Dcodegroup\LaravelXeroTimesheetSync\Traits;
 
+use App\Models\User;
 use Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 trait XeroTimesheetable
@@ -27,9 +29,63 @@ trait XeroTimesheetable
         $this->update(['can_include_in_xero_sync', false]);
     }
 
+    public function scopeEligibleForXero(Builder $query): Builder
+    {
+        return $query->where('can_include_in_xero_sync', true);
+    }
+
     public function toggleIncludeInXeroSync()
     {
         $this->can_include_in_xero_sync = ! $this->can_include_in_xero_sync;
         $this->save();
+
+        $this->updateTimesheetLines();
+    }
+
+    private function updateTimesheetLines()
+    {
+        logger('start: ' . $this->start->toDateString());
+        logger('stop: ' . $this->stop->toDateString());
+        logger('id: ' . $this->timesheetable_id);
+        $model = XeroTimesheet::query()->periodBetween($this->start->toDateString(), $this->stop->toDateString())
+                              ->whereHasMorph('xerotimeable', [User::class], fn (Builder $builder) => $builder->where('id', $this->timesheetable_id))
+                              ->first();
+
+        if ($model instanceof XeroTimesheet) {
+            if ($this->start->toDateString() != $this->stop->toDateString()) {
+                /*
+                 * check if the timesheet spans over two days
+                 * If it is then split the period
+                 */
+                logger('got into the day span section');
+
+                $startLine = $model->lines()->whereDate('date', $this->start->toDateString())->first();
+                $endLine = $model->lines()->whereDate('date', $this->stop->toDateString())->first();
+
+
+                if ($this->canSendToXero()) {
+                    $startLine->update(['units' => round($this->start->floatDiffInHours($this->start->copy()
+                                                                                                    ->endOfDay()
+                                                                                                    ->addSecond()), 2)]);
+
+                    $endLine->update(['units' => round($this->stop->floatDiffInHours($this->stop->copy()
+                                                                                                ->startOfDay()), 2)]);
+                } else {
+                    $startLine->update(['units' => 0]);
+                    $endLine->update(['units' => 0]);
+                }
+
+            } else {
+                $line = $model->lines()->whereDate('date', $this->start->toDateString())->first();
+
+                if ($this->canSendToXero()) {
+                    $line->update(['units' => $this->units]);
+                } else {
+                    $line->update(['units' => 0]);
+                }
+            }
+        } else {
+          logger('no model');
+        }
     }
 }

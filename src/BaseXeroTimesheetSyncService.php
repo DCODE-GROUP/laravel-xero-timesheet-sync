@@ -35,7 +35,7 @@ class BaseXeroTimesheetSyncService extends BaseXeroService
             );
         }
 
-        logger('response: '.json_encode($response));
+        //logger('response: '.json_encode($response));
 
         if ($response instanceof BadRequestException) {
             logger($response->getMessage());

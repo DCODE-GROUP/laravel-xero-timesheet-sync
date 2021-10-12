@@ -53,9 +53,6 @@
 
         <div>
 
-{{--            @dd($xeroTimesheet->prepareTimesheetLines());--}}
-{{--            @dd($xeroTimesheetLines);--}}
-
             <form action="{{ route('xero_timesheet_sync.send-to-xero', $xeroTimesheet) }}" method="POST">
                 @csrf
 

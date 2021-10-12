@@ -21,8 +21,7 @@ class PayrollCalendarService
         $this->configurationPayrollCalendars = Configuration::byKey('xero_payroll_calendars')
             ->get()
             ->pluck('value')
-            ->first()
-        ;
+            ->first();
     }
 
     public function generatePeriodDays(string $payrollCalendarPeriod = null)
@@ -102,6 +101,7 @@ class PayrollCalendarService
             ->whereDate('start', '>=', Carbon::parse($startDate)->startOfDay())
             ->whereDate('stop', '<=', Carbon::parse($endDate)->endOfDay())
             ->whereHasMorph('timesheetable', [User::class], fn (Builder $builder) => $builder->where('id', $user->id))
+            ->eligibleForXero()
             ->get()
             ->map(function ($timesheet) {
                 if ($timesheet->start->toDateString() != $timesheet->stop->toDateString()) {
@@ -143,10 +143,12 @@ class PayrollCalendarService
                     ],
                 ];
             })
-            ->toArray()
-        ;
+            ->toArray();
     }
 
+    /**
+     * @return \Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet|false|\Illuminate\Database\Eloquent\Model
+     */
     public function findOrderCreateXeroTimesheet(string $payrollCalendarPeriod = null, int $userId = null)
     {
         if (is_null($payrollCalendarPeriod) || is_null($userId)) {
@@ -155,7 +157,7 @@ class PayrollCalendarService
 
         $user = User::find($userId);
 
-        if (! $user instanceof User) {
+        if (!$user instanceof User) {
             return false;
         }
 
@@ -164,12 +166,9 @@ class PayrollCalendarService
             $endDate,
         ] = explode('||', $payrollCalendarPeriod);
 
-        $model = XeroTimesheet::query()
-            ->whereDate('start_date', '>=', $startDate)
-            ->whereDate('end_date', '<=', $endDate)
+        $model = XeroTimesheet::query()->periodBetween($startDate, $endDate)
             ->whereHasMorph('xerotimeable', [User::class], fn (Builder $builder) => $builder->where('id', $user->id))
-            ->first()
-        ;
+            ->first();
 
         if ($model instanceof XeroTimesheet) {
             return $model;
@@ -299,7 +298,7 @@ class PayrollCalendarService
             foreach ($days as $key => $label) {
                 $units = 0;
 
-                if ($rate['key'] == 'xero_default_ordinary_earnings_rate_id' && isset($timesheets[$key]['units'])) {
+                if ('xero_default_ordinary_earnings_rate_id' == $rate['key'] && isset($timesheets[$key]['units'])) {
                     $units = $timesheets[$key]['units'];
                 }
 
