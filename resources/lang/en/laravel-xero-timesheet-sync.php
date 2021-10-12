@@ -21,4 +21,8 @@ return [
     'words' => [
         'total' => 'Total',
     ],
+
+    'alerts' => [
+        'warning_timesheet_changed' => 'Timesheet has been modified since last sync with Xero'
+    ],
 ];

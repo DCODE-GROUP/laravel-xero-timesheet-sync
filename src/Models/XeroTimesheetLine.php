@@ -29,13 +29,6 @@ class XeroTimesheetLine extends Model
     ];
 
     /**
-     * All of the relationships to be touched.
-     *
-     * @var array
-     */
-    protected $touches = ['timesheet'];
-
-    /**
      * The accessors to append to the model's array form.
      *
      * @var array
@@ -44,7 +37,7 @@ class XeroTimesheetLine extends Model
 
     public function timesheet(): BelongsTo
     {
-        return $this->belongsTo(XeroTimesheet::class);
+        return $this->belongsTo(config('laravel-xero-timesheet-sync.timesheet_model'));
     }
 
     public function getSummaryFormKeyAttribute(): string

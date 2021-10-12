@@ -69,6 +69,8 @@ trait XeroTimesheetable
                     $startLine->update(['units' => 0]);
                     $endLine->update(['units' => 0]);
                 }
+
+                $startLine->timesheet()->touch();
             } else {
                 $line = $model->lines()->whereDate('date', $this->start->toDateString())->first();
 
@@ -78,8 +80,6 @@ trait XeroTimesheetable
                     $line->update(['units' => 0]);
                 }
             }
-        } else {
-            logger('no model');
         }
     }
 }

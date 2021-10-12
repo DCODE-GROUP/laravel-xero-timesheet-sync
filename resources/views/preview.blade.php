@@ -53,6 +53,16 @@
 
         <div>
 
+            @if($xeroTimesheet->isOutOfSyncWithXero())
+            <header class="alert warning">
+                <div>
+                    <span>*</span>
+                    <small>@lang('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.alerts.warning_timesheet_changed')</small>
+                </div>
+                <button>x</button>
+            </header>
+            @endif
+
             <form action="{{ route('xero_timesheet_sync.send-to-xero', $xeroTimesheet) }}" method="POST">
                 @csrf
 

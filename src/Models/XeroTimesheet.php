@@ -76,4 +76,9 @@ class XeroTimesheet extends Model
         return $query->whereDate('start_date', '<=', $startDate)
                      ->whereDate('end_date', '>=', $endDate);
     }
+
+    public function isOutOfSyncWithXero(): bool
+    {
+        return $this->updated_at->gt($this->synced_at);
+    }
 }
