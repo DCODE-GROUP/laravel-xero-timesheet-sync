@@ -60,7 +60,7 @@ trait XeroTimesheetable
 
                 $startLine = $model->lines()->whereDate('date', $this->start->toDateString())->first();
                 $endLine = $model->lines()->whereDate('date', $this->stop->toDateString())->first();
-                
+
                 if ($this->canSendToXero()) {
                     $startLine->update(['units' => round($this->start->floatDiffInHours($this->start->copy()
                                                                                                     ->endOfDay()
