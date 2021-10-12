@@ -4,9 +4,9 @@ namespace Dcodegroup\LaravelXeroTimesheetSync\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Dcodegroup\LaravelXeroTimesheetSync\Http\Requests\XeroTimesheetPreviewRequest;
 use Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet;
 use Dcodegroup\LaravelXeroTimesheetSync\Service\PayrollCalendarService;
-use Illuminate\Http\Request;
 
 class XeroTimesheetPreviewController extends Controller
 {
@@ -20,9 +20,9 @@ class XeroTimesheetPreviewController extends Controller
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function __invoke(Request $request)
+    public function __invoke(XeroTimesheetPreviewRequest $request)
     {
-        $xeroTimesheet = $this->service->findOrderCreateXeroTimesheet($request->input('payroll_calendar_period'), $request->input('user_id'));
+        $xeroTimesheet = $this->service->findOrCreateXeroTimesheet($request->input('payroll_calendar_period'), $request->input('user_id'));
         $xeroTimesheetLines = collect([]);
 
         if ($xeroTimesheet instanceof XeroTimesheet) {
@@ -30,10 +30,11 @@ class XeroTimesheetPreviewController extends Controller
         }
 
         return view('xero-timesheet-sync-views::preview')
-            ->with('users', User::hasXeroEmployeeId()->get()->map(function ($user) {
+            ->with('users', User::hasXeroEmployeeId()->get()->map(function ($item) use ($request) {
                 return [
-                    'value' => $user->id,
-                    'label' => $user->xero_employee_name,
+                    'value' => $item->id,
+                    'label' => $item->xero_employee_name,
+                    'selected' => $request->input('user_id') == $item->id,
                 ];
             }))
             ->with('xeroPayrollCalendars', $this->service->getPayrollCalendarsFromConfiguration())
@@ -44,10 +45,10 @@ class XeroTimesheetPreviewController extends Controller
             ->with('xeroTimesheet', $xeroTimesheet)
             ->with('xeroTimesheetLines', $xeroTimesheetLines)
             ->with('earningRates', $this->service->getXeroEarningRates())
-        ;
+            ;
     }
 
-    protected function displayPreview(Request $request): bool
+    protected function displayPreview(XeroTimesheetPreviewRequest $request): bool
     {
         return $request->filled('user_id') && $request->filled('payroll_calendar') && $request->filled('payroll_calendar_period');
     }

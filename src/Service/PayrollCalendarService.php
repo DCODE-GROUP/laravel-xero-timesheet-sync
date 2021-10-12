@@ -149,7 +149,7 @@ class PayrollCalendarService
     /**
      * @return \Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet|false|\Illuminate\Database\Eloquent\Model
      */
-    public function findOrderCreateXeroTimesheet(string $payrollCalendarPeriod = null, int $userId = null)
+    public function findOrCreateXeroTimesheet(string $payrollCalendarPeriod = null, int $userId = null)
     {
         if (is_null($payrollCalendarPeriod) || is_null($userId)) {
             return false;

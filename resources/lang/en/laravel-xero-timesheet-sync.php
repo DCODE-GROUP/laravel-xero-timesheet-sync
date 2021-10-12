@@ -14,6 +14,10 @@ return [
         'user' => 'User',
     ],
 
+    'placeholders' => [
+        'select' => '-- Please Select --',
+    ],
+
     'phrases' => [
         'total_period_hours' => 'Total Hours For ',
     ],
@@ -24,6 +28,6 @@ return [
 
     'alerts' => [
         'warning_timesheet_changed' => 'Timesheet has been modified since last sync with Xero',
-        'send_to_xero_queued' => 'Sending Timesheet to Xero.',
+        'send_to_xero_queued' => 'Job has been dispatched to send the Timesheet to Xero.',
     ],
 ];
