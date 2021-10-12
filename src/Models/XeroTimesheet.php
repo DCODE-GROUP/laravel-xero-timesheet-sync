@@ -2,6 +2,7 @@
 
 namespace Dcodegroup\LaravelXeroTimesheetSync\Models;
 
+use App\Models\User;
 use Dcodegroup\LaravelXeroTimesheetSync\Jobs\SendTimesheetToXero;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -75,6 +76,12 @@ class XeroTimesheet extends Model
     {
         return $query->whereDate('start_date', '<=', $startDate)
                      ->whereDate('end_date', '>=', $endDate);
+    }
+
+    public function scopeUserHasTimesheetForPeriod(Builder $query, array $userIds): Builder
+    {
+        return $query->whereIn('xerotimeable_id', $userIds)
+            ->where('xerotimeable_type', User::morphMap());
     }
 
     public function isOutOfSyncWithXero(): bool

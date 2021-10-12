@@ -3,6 +3,8 @@
 @section('content')
 <div>
 
+    <h2>@lang('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.headings.preview')</h2>
+
     <div>
         <form action="{{ route('xero_timesheet_sync.preview') }}" method="GET">
 
@@ -89,17 +91,23 @@
                     <thead>
                     <tr>
                         <th></th>
+                        <th>view preview</th>
                         @foreach($payrollCalendarPeriodDays as $day)
-                            <th>{{ $day }} </th>
+                            <th>{{ $day }}</th>
                         @endforeach
                         <th>@lang('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.words.total')</th>
                     </tr>
                     </thead>
                     <tbody>
 
+
                     @foreach($earningRates as $rate)
                         <tr>
                             <td>{{ $rate['name'] }}</td>
+                            <td><a href="{{ route('xero_timesheet_sync.preview', ['user_id' => $request->input('user_id'),
+            'payroll_calendar' => $request->input('payroll_calendar'),
+            'payroll_calendar_period' => $request->input('payroll_calendar_period'),
+        ])}}"></a></td>
                             @foreach($payrollCalendarPeriodDays as $key => $value)
                                 <td>
                                     <small class="original-units">

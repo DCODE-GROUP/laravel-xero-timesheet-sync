@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'headings' => [
+      'preview' => 'Preview',
+      'summary' => 'Summary',
+    ],
+
     'buttons' => [
         'preview' => 'Preview Timesheets',
         'summary' => 'Summary',
