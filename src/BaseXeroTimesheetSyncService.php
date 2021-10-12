@@ -28,6 +28,7 @@ class BaseXeroTimesheetSyncService extends BaseXeroService
         if ($response instanceof BadRequestException) {
             logger($response->getMessage());
             report($response);
+
             return false;
         }
 
