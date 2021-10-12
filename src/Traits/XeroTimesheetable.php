@@ -44,9 +44,6 @@ trait XeroTimesheetable
 
     private function updateTimesheetLines()
     {
-        logger('start: ' . $this->start->toDateString());
-        logger('stop: ' . $this->stop->toDateString());
-        logger('id: ' . $this->timesheetable_id);
         $model = XeroTimesheet::query()->periodBetween($this->start->toDateString(), $this->stop->toDateString())
                               ->whereHasMorph('xerotimeable', [User::class], fn (Builder $builder) => $builder->where('id', $this->timesheetable_id))
                               ->first();
