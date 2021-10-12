@@ -18,17 +18,24 @@ class BaseXeroTimesheetSyncService extends BaseXeroService
         ];
 
         if ($xeroTimesheet->hasXeroGuid()) {
-            $guid = (object) [
-                'identifier' => 'TimesheetID',
-                'guid'       => $xeroTimesheet->xero_timesheet_guid,
-            ];
-
-            $response = $this->updateModel(Timesheet::class, $guid, $timesheetParameters, $xeroTimesheet->prepareTimesheetLines());
+            $response = $this->updateModel(
+                Timesheet::class,
+                (object) [
+                    'identifier' => 'TimesheetID',
+                    'guid' => $xeroTimesheet->xero_timesheet_guid,
+                ],
+                $timesheetParameters,
+                $xeroTimesheet->prepareTimesheetLines()
+            );
         } else {
-            $response = $this->saveModel(Timesheet::class, $timesheetParameters, $xeroTimesheet->prepareTimesheetLines());
+            $response = $this->saveModel(
+                Timesheet::class,
+                $timesheetParameters,
+                $xeroTimesheet->prepareTimesheetLines()
+            );
         }
 
-        logger('response: ' .json_encode($response));
+        logger('response: '.json_encode($response));
 
         if ($response instanceof BadRequestException) {
             logger($response->getMessage());
