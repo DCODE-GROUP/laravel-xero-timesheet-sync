@@ -43,7 +43,7 @@ class XeroTimesheet extends Model
 
     public function hasXeroGuid(): bool
     {
-        return !empty($this->xero_timesheet_guid);
+        return ! empty($this->xero_timesheet_guid);
     }
 
     public function prepareTimesheetLines(): array
