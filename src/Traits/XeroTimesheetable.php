@@ -72,7 +72,6 @@ trait XeroTimesheetable
                     $startLine->update(['units' => 0]);
                     $endLine->update(['units' => 0]);
                 }
-
             } else {
                 $line = $model->lines()->whereDate('date', $this->start->toDateString())->first();
 
@@ -83,7 +82,7 @@ trait XeroTimesheetable
                 }
             }
         } else {
-          logger('no model');
+            logger('no model');
         }
     }
 }
