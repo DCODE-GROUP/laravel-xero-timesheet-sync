@@ -63,6 +63,16 @@
             </header>
             @endif
 
+            @if(session('statusMessage'))
+                <header class="alert success">
+                    <div>
+                        <span>*</span>
+                        <small>{{ session('statusMessage') }}</small>
+                    </div>
+                    <button>x</button>
+                </header>
+            @endif
+
             <form action="{{ route('xero_timesheet_sync.send-to-xero', $xeroTimesheet) }}" method="POST">
                 @csrf
 

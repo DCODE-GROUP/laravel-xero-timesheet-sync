@@ -37,7 +37,7 @@ class XeroTimesheetLine extends Model
 
     public function timesheet(): BelongsTo
     {
-        return $this->belongsTo(config('laravel-xero-timesheet-sync.xero_timesheet_model'));
+        return $this->belongsTo(config('laravel-xero-timesheet-sync.xero_timesheet_model'), 'xero_timesheet_id');
     }
 
     public function getSummaryFormKeyAttribute(): string

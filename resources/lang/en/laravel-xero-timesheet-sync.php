@@ -23,6 +23,7 @@ return [
     ],
 
     'alerts' => [
-        'warning_timesheet_changed' => 'Timesheet has been modified since last sync with Xero'
+        'warning_timesheet_changed' => 'Timesheet has been modified since last sync with Xero',
+        'send_to_xero_queued' => 'Sending Timesheet to Xero.',
     ],
 ];

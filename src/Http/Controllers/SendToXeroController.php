@@ -15,6 +15,6 @@ class SendToXeroController extends Controller
         return redirect()->route('xero_timesheet_sync.preview', ['user_id' => $request->input('user_id'),
             'payroll_calendar' => $request->input('payroll_calendar'),
             'payroll_calendar_period' => $request->input('payroll_calendar_period'),
-        ]);
+        ])->with('statusMessage', __('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.alerts.send_to_xero_queued'));
     }
 }
