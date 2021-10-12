@@ -57,12 +57,10 @@ trait XeroTimesheetable
                  * check if the timesheet spans over two days
                  * If it is then split the period
                  */
-                logger('got into the day span section');
 
                 $startLine = $model->lines()->whereDate('date', $this->start->toDateString())->first();
                 $endLine = $model->lines()->whereDate('date', $this->stop->toDateString())->first();
-
-
+                
                 if ($this->canSendToXero()) {
                     $startLine->update(['units' => round($this->start->floatDiffInHours($this->start->copy()
                                                                                                     ->endOfDay()
