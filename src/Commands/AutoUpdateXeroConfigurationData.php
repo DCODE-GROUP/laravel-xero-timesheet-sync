@@ -31,7 +31,7 @@ class AutoUpdateXeroConfigurationData extends Command
         $force = $this->option('force');
         $record = Configuration::byKey('xero_payroll_calendars')->first();
 
-        if ($record->updatedAt->gte(now()->subWeek()) || $force) {
+        if ($record->updated_at->gte(now()->subWeek()) || $force) {
             SyncPayrollConfigurationOptions::dispatch();
             $this->info('Laravel Xero Timesheet Sync Xero Configuration data updated.');
         } else {
