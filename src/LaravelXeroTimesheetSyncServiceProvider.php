@@ -4,6 +4,7 @@ namespace Dcodegroup\LaravelXeroTimesheetSync;
 
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Dcodegroup\LaravelXeroTimesheetSync\Commands\AutoUpdateXeroConfigurationData;
 use Dcodegroup\LaravelXeroTimesheetSync\Commands\InstallCommand;
 use Dcodegroup\LaravelXeroTimesheetSync\Observers\LaravelXeroTimesheetSyncObseerver;
 use Illuminate\Support\Facades\Route;
@@ -82,6 +83,7 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 InstallCommand::class,
+                AutoUpdateXeroConfigurationData::class,
             ]);
         }
     }
