@@ -7,7 +7,7 @@ use Carbon\CarbonPeriod;
 use Dcodegroup\LaravelXeroTimesheetSync\Commands\AutoUpdateXeroConfigurationData;
 use Dcodegroup\LaravelXeroTimesheetSync\Commands\InstallCommand;
 use Dcodegroup\LaravelXeroTimesheetSync\Observers\LaravelXeroTimesheetLineSyncObserver;
-use Dcodegroup\LaravelXeroTimesheetSync\Observers\LaravelXeroTimesheetSyncObserver;
+use Dcodegroup\LaravelXeroTimesheetSync\Observers\LaravelTimesheetObserver;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -25,9 +25,9 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
         $this->registerCommands();
 
         $timesheetClass = config('laravel-xero-timesheet-sync.timesheet_model');
-        $timesheetClass::observe(new LaravelXeroTimesheetSyncObserver());
+        $timesheetClass::observe(new LaravelTimesheetObserver());
 
-        $timesheetLineClass = config('laravel-xero-timesheet-sync.timesheet_line_model');
+        $timesheetLineClass = config('laravel-xero-timesheet-sync.xero_timesheet_line_model');
         $timesheetLineClass::observe(new LaravelXeroTimesheetLineSyncObserver());
 
         $this->registerResources();

@@ -5,7 +5,7 @@ namespace Dcodegroup\LaravelXeroTimesheetSync\Observers;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-class LaravelXeroTimesheetSyncObserver
+class LaravelTimesheetObserver
 {
     public function saving(Model $model)
     {

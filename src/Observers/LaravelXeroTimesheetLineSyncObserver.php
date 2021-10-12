@@ -8,7 +8,6 @@ class LaravelXeroTimesheetLineSyncObserver
 {
     public function updated(Model $model)
     {
-        dd($model);
         $model->timesheet->touch();
     }
 }
