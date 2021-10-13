@@ -43,22 +43,22 @@ class GenerateTimesheetsForSummary implements ShouldQueue
      */
     public function handle()
     {
-       /**
-        * Set the cache key
-        */
+        /**
+         * Set the cache key
+         */
         $this->setCacheKey();
 
         $usersToGenerate = $this->users->filter(function ($user) {
-            return !in_array($user->id, $this->userIdsWithTimesheets->pluck('xerotimeable_id')->toArray());
+            return ! in_array($user->id, $this->userIdsWithTimesheets->pluck('xerotimeable_id')->toArray());
         });
 
         $usersToGenerate->each(function ($user) {
             GenerateUserTimesheet::dispatch($user, $this->startDate, $this->endDate);
         });
 
-       /**
-        * Delete the cache key
-        */
+        /**
+         * Delete the cache key
+         */
         $this->removeCacheKey();
     }
 
@@ -71,5 +71,4 @@ class GenerateTimesheetsForSummary implements ShouldQueue
     {
         Cache::forget($this->cacheKey);
     }
-
 }

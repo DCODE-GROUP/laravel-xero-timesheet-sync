@@ -3,7 +3,6 @@
 namespace Dcodegroup\LaravelXeroTimesheetSync\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Dcodegroup\LaravelXeroTimesheetSync\Service\PayrollCalendarService;
 use Illuminate\Http\Request;
 
@@ -22,7 +21,7 @@ class XeroTimesheetSummaryController extends Controller
          * Need to work out if all xero_timesheets are generated for all users
          */
         $isTimesheetsGenerated = false;
-        
+
         return view('xero-timesheet-sync-views::summary')
             //->with('users', $users)
             ->with('xeroPayrollCalendars', $this->service->getPayrollCalendarsFromConfiguration())
