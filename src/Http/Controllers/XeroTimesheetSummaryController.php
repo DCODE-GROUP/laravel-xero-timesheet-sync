@@ -35,7 +35,7 @@ class XeroTimesheetSummaryController extends Controller
      */
     private function retrieveUserTimesheets(Request $request)
     {
-        if (!$request->filled('payroll_calendar_period')) {
+        if (! $request->filled('payroll_calendar_period')) {
             return collect([]);
         }
 
