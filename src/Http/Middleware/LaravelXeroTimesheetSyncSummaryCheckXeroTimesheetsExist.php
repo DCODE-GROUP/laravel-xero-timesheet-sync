@@ -33,7 +33,6 @@ class LaravelXeroTimesheetSyncSummaryCheckXeroTimesheetsExist
              */
 
             $userIdsWithTimesheets = XeroTimesheet::query()->periodBetween($startDate, $endDate)->userHasTimesheetForPeriod($users->pluck('id')->toArray())->get();
-            //dd($userIdsWithTimesheets->toArray(),  $userIdsWithTimesheets->count(),$users->count());
 
             if ($userIdsWithTimesheets->count() != $users->count()) {
                 if (! Cache::has("laravel-timesheet-sync-summary-{$request->input('payroll_calendar')}-{$request->input('payroll_calendar_period')}")) {
