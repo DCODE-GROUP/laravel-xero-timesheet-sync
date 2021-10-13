@@ -4,8 +4,10 @@ namespace Dcodegroup\LaravelXeroTimesheetSync\Http\Middleware;
 
 use App\Models\User;
 use Closure;
+use Dcodegroup\LaravelXeroTimesheetSync\Jobs\GenerateTimesheetsForSummary;
 use Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class LaravelXeroTimesheetSyncSummaryCheckXeroTimesheetsExist
 {
@@ -30,9 +32,15 @@ class LaravelXeroTimesheetSyncSummaryCheckXeroTimesheetsExist
              * ASSUMPTION
              */
 
-            $results = XeroTimesheet::query()->periodBetween($startDate, $endDate)->userHasTimesheetForPeriod($users->pluck('id')->toArray())->get();
+            $userIdsWithTimesheets = XeroTimesheet::query()->periodBetween($startDate, $endDate)->userHasTimesheetForPeriod($users->pluck('id')->toArray())->get();
+            //dd($userIdsWithTimesheets->toArray(),  $userIdsWithTimesheets->count(),$users->count());
 
-            if (count($results) != $users->count()) {
+            if ($userIdsWithTimesheets->count() != $users->count()) {
+
+                if (!Cache::has("laravel-timesheet-sync-summary-{$request->input('payroll_calendar')}-{$request->input('payroll_calendar_period')}")) {
+                    GenerateTimesheetsForSummary::dispatch($users, $userIdsWithTimesheets, $startDate, $endDate);
+                }
+
                 return redirect()->route('xero_timesheet_sync.summary-generating', [
                     'payroll_calendar' => $request->input('payroll_calendar'),
                     'payroll_calendar_period' => $request->input('payroll_calendar_period'),
