@@ -17,16 +17,14 @@ class GenerateUserTimesheet implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    protected string $startDate;
-    protected string $endDate;
+    protected string $payrollPeriod;
     protected User $user;
 
-    public function __construct(User $user, string $startDate, string $endDate)
+    public function __construct(User $user, string $payrollPeriod)
     {
         $this->queue = config('laravel-xero-timesheet-sync.queue_name');
 
-        $this->startDate = $startDate;
-        $this->endDate = $endDate;
+        $this->payrollPeriod = $payrollPeriod;
         $this->user = $user;
     }
 
@@ -38,6 +36,6 @@ class GenerateUserTimesheet implements ShouldQueue
     public function handle()
     {
         $service = resolve(PayrollCalendarService::class);
-        $service->generateDraftTimesheet($this->startDate, $this->endDate, $this->user);
+        $service->findOrCreateXeroTimesheet($this->payrollPeriod, $this->user);
     }
 }
