@@ -21,7 +21,8 @@ class PayrollCalendarService
         $this->configurationPayrollCalendars = Configuration::byKey('xero_payroll_calendars')
             ->get()
             ->pluck('value')
-            ->first();
+            ->first()
+        ;
     }
 
     public function generatePeriodDays(string $payrollCalendarPeriod = null)
@@ -143,21 +144,22 @@ class PayrollCalendarService
                     ],
                 ];
             })
-            ->toArray();
+            ->toArray()
+        ;
     }
 
     /**
      * @return \Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet|false|\Illuminate\Database\Eloquent\Model
      */
-    public function findOrCreateXeroTimesheet(string $payrollCalendarPeriod = null, int $userId = null)
+    public function findOrCreateXeroTimesheet(string $payrollCalendarPeriod = null, int|User $userId = null)
     {
         if (is_null($payrollCalendarPeriod) || is_null($userId)) {
             return false;
         }
 
-        $user = User::find($userId);
+        $user = ($userId instanceof User) ? $userId : User::find($userId);
 
-        if (! $user instanceof User) {
+        if (!$user instanceof User) {
             return false;
         }
 
@@ -168,7 +170,8 @@ class PayrollCalendarService
 
         $model = XeroTimesheet::query()->periodBetween($startDate, $endDate)
             ->whereHasMorph('xerotimeable', [User::class], fn (Builder $builder) => $builder->where('id', $user->id))
-            ->first();
+            ->first()
+        ;
 
         if ($model instanceof XeroTimesheet) {
             return $model;
