@@ -25,8 +25,8 @@ class GenerateTimesheetsForSummary implements ShouldQueue
     public function __construct(
         Collection $users,
         Collection $userIdsWithTimesheets,
-        string $payrollPeriod,
-        string $payrollCalender
+        string $payrollCalender,
+        string $payrollPeriod
     ) {
         $this->queue = config('laravel-xero-timesheet-sync.queue_name');
 

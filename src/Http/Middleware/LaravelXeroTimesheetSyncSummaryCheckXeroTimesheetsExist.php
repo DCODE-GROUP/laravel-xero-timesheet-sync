@@ -39,7 +39,7 @@ class LaravelXeroTimesheetSyncSummaryCheckXeroTimesheetsExist
             {
 
                 if (!Cache::has("laravel-timesheet-sync-summary-{$request->input('payroll_calendar')}-{$request->input('payroll_calendar_period')}")) {
-                    GenerateTimesheetsForSummary::dispatch($users, $userIdsWithTimesheets, $request->input('payroll_calendar_period'));
+                    GenerateTimesheetsForSummary::dispatch($users, $userIdsWithTimesheets, $request->input('payroll_calendar'), $request->input('payroll_calendar_period'));
                 }
 
                 return redirect()->route('xero_timesheet_sync.summary-generating', [
