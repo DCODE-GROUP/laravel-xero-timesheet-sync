@@ -104,10 +104,11 @@
                     @foreach($earningRates as $rate)
                         <tr>
                             <td>{{ $rate['name'] }}</td>
-                            <td><a href="{{ route('xero_timesheet_sync.preview', ['user_id' => $request->input('user_id'),
-            'payroll_calendar' => $request->input('payroll_calendar'),
-            'payroll_calendar_period' => $request->input('payroll_calendar_period'),
-        ])}}"></a></td>
+                            <td><a href="{{ route('xero_timesheet_sync.preview', [
+                                                'user_id' => request('user_id'),
+                                                'payroll_calendar' => request('payroll_calendar'),
+                                                'payroll_calendar_period' => request('payroll_calendar_period'),
+                                            ])}}"></a></td>
                             @foreach($payrollCalendarPeriodDays as $key => $value)
                                 <td>
                                     <small class="original-units">
