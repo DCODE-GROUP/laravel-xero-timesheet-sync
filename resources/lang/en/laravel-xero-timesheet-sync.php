@@ -4,6 +4,7 @@ return [
     'headings' => [
       'preview' => 'Preview',
       'summary' => 'Summary',
+      'generating' => 'Summary Data Generating',
     ],
 
     'buttons' => [
@@ -25,6 +26,7 @@ return [
 
     'phrases' => [
         'total_period_hours' => 'Total Hours For ',
+        'summary_generating' => 'The summary data is currently generating. This page will refresh every 10 seconds until all required data is ready.',
     ],
 
     'words' => [

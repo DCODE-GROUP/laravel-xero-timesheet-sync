@@ -17,7 +17,6 @@ class LaravelXeroTimesheetSyncSummaryCheckXeroTimesheetsExist
     public function handle(Request $request, Closure $next)
     {
         if ($request->filled('payroll_calendar_period') && $request->filled('payroll_calendar')) {
-
             $users = User::hasXeroEmployeeId()->get();
 
             [
@@ -31,14 +30,14 @@ class LaravelXeroTimesheetSyncSummaryCheckXeroTimesheetsExist
              * ASSUMPTION
              */
 
-            $results = XeroTimesheet::query()->scopePeriodBetween($startDate, $endDate)->userHasTimesheetForPeriod($users->pluck('id')->toArray())->get();
+            $results = XeroTimesheet::query()->periodBetween($startDate, $endDate)->userHasTimesheetForPeriod($users->pluck('id')->toArray())->get();
 
-            $count = count($results);
-
-            if ($count != $users->count()) {
-                return redirect()->route()
+            if (count($results) != $users->count()) {
+                return redirect()->route('xero_timesheet_sync.summary-generating', [
+                    'payroll_calendar' => $request->input('payroll_calendar'),
+                    'payroll_calendar_period' => $request->input('payroll_calendar_period'),
+                ]);
             }
-
         }
 
         return $next($request);
