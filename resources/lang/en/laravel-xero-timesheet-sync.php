@@ -8,15 +8,21 @@ return [
     ],
 
     'buttons' => [
+        'go_to_preview' => 'Preview',
         'preview' => 'Preview Timesheets',
-        'summary' => 'Summary',
         'preview_submit' => 'Lookup',
         'submit_to_xero' => 'Send to Xero',
+        'summary' => 'Summary',
     ],
 
     'labels' => [
+        'action' => 'Actions',
+        'message' => 'Messages',
+        'override_unit' => 'Confirmed',
         'payroll_calendar' => 'Payroll Calendar',
         'payroll_calendar_period' => 'Period',
+        'timesheet_unit' => 'Original',
+        'units' => 'Units',
         'user' => 'User',
     ],
 
