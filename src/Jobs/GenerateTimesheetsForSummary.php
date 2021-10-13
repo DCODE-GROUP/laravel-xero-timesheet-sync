@@ -19,23 +19,21 @@ class GenerateTimesheetsForSummary implements ShouldQueue
 
     protected Collection $users;
     protected Collection $userIdsWithTimesheets;
-    protected string $startDate;
-    protected string $endDate;
+    protected string $payrollPeriod;
     protected string $cacheKey;
 
     public function __construct(
         Collection $users,
         Collection $userIdsWithTimesheets,
-        string $startDate,
-        string $endDate,
+        string $payrollPeriod,
+        string $payrollCalender
     ) {
         $this->queue = config('laravel-xero-timesheet-sync.queue_name');
 
         $this->users = $users;
         $this->userIdsWithTimesheets = $userIdsWithTimesheets;
-        $this->startDate = $startDate;
-        $this->endDate = $endDate;
-        $this->cacheKey = "laravel-timesheet-sync-summary-{$payrollCalender}-{$startDate}||{$endDate}";
+        $this->payrollPeriod = $payrollPeriod;
+        $this->cacheKey = "laravel-timesheet-sync-summary-{$payrollCalender}-{$payrollPeriod}";
     }
 
     /**
@@ -53,7 +51,7 @@ class GenerateTimesheetsForSummary implements ShouldQueue
         });
 
         $usersToGenerate->each(function ($user) {
-            GenerateUserTimesheet::dispatch($user, $this->startDate, $this->endDate);
+            GenerateUserTimesheet::dispatch($user, $this->payrollPeriod);
         });
 
        /**
@@ -64,7 +62,7 @@ class GenerateTimesheetsForSummary implements ShouldQueue
 
     private function setCacheKey()
     {
-        Cache::put($this->cacheKey, '');
+        Cache::put($this->cacheKey, true);
     }
 
     private function removeCacheKey()
