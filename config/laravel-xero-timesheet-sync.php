@@ -10,13 +10,25 @@ return [
     *
     */
 
-    'queue_name' => env('LARAVEL_XERO_TIMESHEET_QUEUE_NAME', 'default'),
+    'queue_name' => env('LARAVEL_XERO_TIMESHEET_SYNC_QUEUE_NAME', 'default'),
 
     /*
      * The assumption is this will be the model used for timesheets.
      * You should update this to match your timesheet model. Should be this
      */
     'timesheet_model' => App\Models\Timesheet::class,
+
+    /*
+     * LaravelXeroTimesheet Model
+     * The model being used for XeroTimesheet. Just in case it needs over writing or extending.
+     */
+    'xero_timesheet_model' => \Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet::class,
+
+    /*
+     * LaravelXeroTimesheetLine Model
+     * The model being used for XeroTimesheetLine. Just in case it needs over writing or extending.
+     */
+    'xero_timesheet_line_model' => \Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheetLine::class,
 
     /*
      * The name of the base layout to wrap the pages in.
