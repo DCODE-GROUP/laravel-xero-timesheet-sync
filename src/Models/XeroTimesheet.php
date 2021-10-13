@@ -81,7 +81,7 @@ class XeroTimesheet extends Model
     public function scopeUserHasTimesheetForPeriod(Builder $query, array $userIds): Builder
     {
         return $query->whereIn('xerotimeable_id', $userIds)
-            ->where('xerotimeable_type', (new User)->getMorphClass());
+            ->where('xerotimeable_type', (new User())->getMorphClass());
     }
 
     public function isOutOfSyncWithXero(): bool
