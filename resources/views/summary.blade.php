@@ -77,10 +77,11 @@
 
                         <td class="actions">
                             <a href="{{ route('xero_timesheet_sync.preview', [
-                                                'user_id' => request('user_id'),
+                                                'user_id' => $timesheet->xerotimeable->id,
                                                 'payroll_calendar' => request('payroll_calendar'),
                                                 'payroll_calendar_period' => request('payroll_calendar_period'),
-                                            ])}}">@lang('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.buttons.go_to_preview')</a>
+                                            ])}}"
+                            class="button">@lang('xero-timesheet-sync-translations::laravel-xero-timesheet-sync.buttons.go_to_preview')</a>
 
                         </td>
                         <td>
