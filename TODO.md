@@ -1,6 +1,7 @@
 # TODO
 
-* Listen to a webhook to know when a timesheet has changed on Xero.
+* Extract the PayrollCalendarService to its own package
+* Listen to a webhook to know when a timesheet has changed on Xero. - One is not available
 * When the timesheet is saved in xero and has a guid populate the Timesheet::class rows with the xero_timesheet_id
 
 
