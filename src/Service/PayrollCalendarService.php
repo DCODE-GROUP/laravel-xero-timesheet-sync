@@ -21,8 +21,7 @@ class PayrollCalendarService
         $this->configurationPayrollCalendars = Configuration::byKey('xero_payroll_calendars')
             ->get()
             ->pluck('value')
-            ->first()
-        ;
+            ->first() ?? [];
     }
 
     public function generatePeriodDays(string $payrollCalendarPeriod = null)
