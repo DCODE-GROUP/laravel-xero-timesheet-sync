@@ -44,8 +44,7 @@ class XeroTimesheetPreviewController extends Controller
             ->with('calendarName', $this->service->getCalendarName($request->input('payroll_calendar')))
             ->with('xeroTimesheet', $xeroTimesheet)
             ->with('xeroTimesheetLines', $xeroTimesheetLines)
-            ->with('earningRates', $this->service->getXeroEarningRates())
-            ;
+            ->with('earningRates', $this->service->getXeroEarningRates());
     }
 
     protected function displayPreview(XeroTimesheetPreviewRequest $request): bool

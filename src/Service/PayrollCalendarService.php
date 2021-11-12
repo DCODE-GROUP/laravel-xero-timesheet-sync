@@ -46,6 +46,10 @@ class PayrollCalendarService
 
         $calendar = $this->getCalendar($payrollCalendarId);
 
+        if (is_null($calendar)) {
+            return [];
+        }
+
         $calendarPeriodStarts = $this->buildCalendarPeriodStartDates($calendar);
 
         return collect($calendarPeriodStarts)->map(function ($periodStart) use ($calendar) {
@@ -92,7 +96,13 @@ class PayrollCalendarService
             return '';
         }
 
-        return $this->getName($this->getCalendar($payrollCalendarId));
+        $calendar = $this->getCalendar($payrollCalendarId);
+
+        if (is_null($calendar)) {
+            return '';
+        }
+
+        return $this->getName($calendar);
     }
 
     public function retrieveUserTimeSheets(string $startDate, string $endDate, User $user): array
@@ -242,7 +252,7 @@ class PayrollCalendarService
         //return now()->addMonth()->format('Y-m-d');
     }
 
-    private function buildCalendarPeriodStartDates($calendar)
+    private function buildCalendarPeriodStartDates(array $calendar)
     {
         $date = $this->getReferenceDate($calendar);
 
