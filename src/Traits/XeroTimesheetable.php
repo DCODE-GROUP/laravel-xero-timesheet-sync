@@ -44,19 +44,19 @@ trait XeroTimesheetable
 
     private function updateTimesheetLines()
     {
-        $model = XeroTimesheet::query()->periodBetween($this->start->toDateString(), $this->stop->toDateString())
+        $model = XeroTimesheet::query()->periodBetween($this->start?->toDateString(), $this->stop?->toDateString())
                               ->whereHasMorph('xerotimeable', [User::class], fn (Builder $builder) => $builder->where('id', $this->timesheetable_id))
                               ->first();
 
         if ($model instanceof XeroTimesheet) {
-            if ($this->start->toDateString() != $this->stop->toDateString()) {
+            if ($this->start?->toDateString() != $this->stop?->toDateString()) {
                 /*
                  * check if the timesheet spans over two days
                  * If it is then split the period
                  */
 
-                $startLine = $model->lines()->whereDate('date', $this->start->toDateString())->first();
-                $endLine = $model->lines()->whereDate('date', $this->stop->toDateString())->first();
+                $startLine = $model->lines()->whereDate('date', $this->start?->toDateString())->first();
+                $endLine = $model->lines()->whereDate('date', $this->stop?->toDateString())->first();
 
                 if ($this->canSendToXero()) {
                     $startLine->update(['units' => round($this->start->floatDiffInHours($this->start->copy()
@@ -72,7 +72,7 @@ trait XeroTimesheetable
 
                 $startLine->timesheet()->touch();
             } else {
-                $line = $model->lines()->whereDate('date', $this->start->toDateString())->first();
+                $line = $model->lines()->whereDate('date', $this->start?->toDateString())->first();
 
                 if ($this->canSendToXero()) {
                     $line->update(['units' => $this->units]);
