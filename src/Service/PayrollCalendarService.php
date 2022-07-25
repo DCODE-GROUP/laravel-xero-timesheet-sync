@@ -153,8 +153,7 @@ class PayrollCalendarService
                     ],
                 ];
             })
-            ->toArray()
-        ;
+            ->toArray();
     }
 
     /**
@@ -179,8 +178,7 @@ class PayrollCalendarService
 
         $model = XeroTimesheet::query()->periodBetween($startDate, $endDate)
             ->whereHasMorph('xerotimeable', [User::class], fn (Builder $builder) => $builder->where('id', $user->id))
-            ->first()
-        ;
+            ->first();
 
         if ($model instanceof XeroTimesheet) {
             return $model;

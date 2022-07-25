@@ -2,9 +2,9 @@
 
 return [
     'headings' => [
-      'preview' => 'Preview',
-      'summary' => 'Summary',
-      'generating' => 'Summary Data Generating',
+        'preview' => 'Preview',
+        'summary' => 'Summary',
+        'generating' => 'Summary Data Generating',
     ],
 
     'buttons' => [

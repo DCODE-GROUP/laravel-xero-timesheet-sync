@@ -18,8 +18,11 @@ class GenerateTimesheetsForSummary implements ShouldQueue
     use SerializesModels;
 
     protected Collection $users;
+
     protected Collection $userIdsWithTimesheets;
+
     protected string $payrollPeriod;
+
     protected string $cacheKey;
 
     public function __construct(

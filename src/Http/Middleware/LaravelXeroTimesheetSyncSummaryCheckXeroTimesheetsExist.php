@@ -31,7 +31,6 @@ class LaravelXeroTimesheetSyncSummaryCheckXeroTimesheetsExist
              * TIMESHEETS IN ZERO HAVE NO KNOWLEDGE OR CARE ABOUT CALENDARS SO USING THE SAME
              * ASSUMPTION
              */
-
             $userIdsWithTimesheets = XeroTimesheet::query()->periodBetween($startDate, $endDate)->userHasTimesheetForPeriod($users->pluck('id')->toArray())->get();
 
             if ($userIdsWithTimesheets->count() != $users->count()) {

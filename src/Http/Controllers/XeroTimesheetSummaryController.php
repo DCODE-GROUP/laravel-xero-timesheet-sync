@@ -24,13 +24,11 @@ class XeroTimesheetSummaryController extends Controller
             ->with('payrollCalendarPeriodDays', $this->service->generatePeriodDays($request->input('payroll_calendar_period')))
             ->with('calendarName', $this->service->getCalendarName($request->input('payroll_calendar')))
             ->with('xeroTimesheets', $this->retrieveUserTimesheets($request))
-            ->with('earningRates', $this->service->getXeroEarningRates())
-            ;
+            ->with('earningRates', $this->service->getXeroEarningRates());
     }
 
     /**
      * @param  \Illuminate\Http\Request  $request
-     *
      * @return mixed
      */
     private function retrieveUserTimesheets(Request $request)

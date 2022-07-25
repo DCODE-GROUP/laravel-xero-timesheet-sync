@@ -18,6 +18,7 @@ class GenerateUserTimesheet implements ShouldQueue
     use SerializesModels;
 
     protected string $payrollPeriod;
+
     protected User $user;
 
     public function __construct(User $user, string $payrollPeriod)

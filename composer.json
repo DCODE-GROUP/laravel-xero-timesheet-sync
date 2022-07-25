@@ -32,9 +32,6 @@
     "dcodegroup/laravel-xero-employee": "^0.1",
     "laravel/framework": "^7.0 |^8.0"
   },
-  "require-dev": {
-    "friendsofphp/php-cs-fixer": "^2.16"
-  },
   "autoload": {
     "psr-4": {
       "Dcodegroup\\LaravelXeroTimesheetSync\\": "src"
@@ -42,7 +39,7 @@
   },
   "scripts": {
     "psalm": "vendor/bin/psalm",
-    "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
+    "format": "vendor/bin/pint"
   },
   "config": {
     "sort-packages": true
@@ -53,5 +50,8 @@
         "Dcodegroup\\LaravelXeroTimesheetSync\\LaravelXeroTimesheetSyncServiceProvider"
       ]
     }
+  },
+  "require-dev": {
+    "laravel/pint": "^1.0"
   }
 }
