@@ -54,13 +54,12 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
         $this->publishes([__DIR__.'/../config/laravel-xero-timesheet-sync.php' => config_path('laravel-xero-timesheet-sync.php')], 'laravel-xero-timesheet-sync-config');
 
         try {
-
             //dd('timesheet sync');
             if (Schema::hasTable('timesheets') && ! Schema::hasColumns('timesheets', [
-                    'can_include_in_xero_sync',
-                    'units',
-                    'xero_timesheet_id',
-                ])) {
+                'can_include_in_xero_sync',
+                'units',
+                'xero_timesheet_id',
+            ])) {
                 $timestamp = date('Y_m_d_His', time());
 
                 $this->publishes([
@@ -86,8 +85,6 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
         } catch (Exception $e) {
             report($e);
         }
-
-
     }
 
     protected function registerCommands()
