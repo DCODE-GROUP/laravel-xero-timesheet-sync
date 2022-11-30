@@ -8,6 +8,7 @@ use Dcodegroup\LaravelXeroTimesheetSync\Commands\AutoUpdateXeroConfigurationData
 use Dcodegroup\LaravelXeroTimesheetSync\Commands\InstallCommand;
 use Dcodegroup\LaravelXeroTimesheetSync\Observers\LaravelTimesheetObserver;
 use Dcodegroup\LaravelXeroTimesheetSync\Observers\LaravelXeroTimesheetLineSyncObserver;
+use Exception;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -52,34 +53,41 @@ class LaravelXeroTimesheetSyncServiceProvider extends ServiceProvider
     {
         $this->publishes([__DIR__.'/../config/laravel-xero-timesheet-sync.php' => config_path('laravel-xero-timesheet-sync.php')], 'laravel-xero-timesheet-sync-config');
 
-        if (Schema::hasTable('timesheets')
-            && ! Schema::hasColumns('timesheets', [
-                'can_include_in_xero_sync',
-                'units',
-                'xero_timesheet_id',
-            ])) {
-            $timestamp = date('Y_m_d_His', time());
+        try {
 
-            $this->publishes([
-                __DIR__.'/../database/migrations/add_laravel_timesheet_sync_fields_to_timesheets_table.stub.php' => database_path('migrations/'.$timestamp.'_add_laravel_timesheet_sync_fields_to_timesheets_table.php'),
-            ], 'laravel-xero-timesheet-sync-timesheet-table-migrations');
+            //dd('timesheet sync');
+            if (Schema::hasTable('timesheets') && ! Schema::hasColumns('timesheets', [
+                    'can_include_in_xero_sync',
+                    'units',
+                    'xero_timesheet_id',
+                ])) {
+                $timestamp = date('Y_m_d_His', time());
+
+                $this->publishes([
+                    __DIR__.'/../database/migrations/add_laravel_timesheet_sync_fields_to_timesheets_table.stub.php' => database_path('migrations/'.$timestamp.'_add_laravel_timesheet_sync_fields_to_timesheets_table.php'),
+                ], 'laravel-xero-timesheet-sync-timesheet-table-migrations');
+            }
+
+            if (! Schema::hasTable('xero_timesheets')) {
+                $timestamp = date('Y_m_d_His', time());
+
+                $this->publishes([
+                    __DIR__.'/../database/migrations/create_xero_timesheets_table.stub.php' => database_path('migrations/'.$timestamp.'_create_xero_timesheets_table.php'),
+                ], 'laravel-xero-timesheet-sync-timesheet-table-migrations');
+            }
+
+            if (! Schema::hasTable('xero_timesheet_lines')) {
+                $timestamp = date('Y_m_d_His', time());
+
+                $this->publishes([
+                    __DIR__.'/../database/migrations/create_xero_timesheet_lines_table.stub.php' => database_path('migrations/'.$timestamp.'_create_xero_timesheet_lines_table.php'),
+                ], 'laravel-xero-timesheet-sync-timesheet-table-migrations');
+            }
+        } catch (Exception $e) {
+            report($e);
         }
 
-        if (! Schema::hasTable('xero_timesheets')) {
-            $timestamp = date('Y_m_d_His', time());
 
-            $this->publishes([
-                __DIR__.'/../database/migrations/create_xero_timesheets_table.stub.php' => database_path('migrations/'.$timestamp.'_create_xero_timesheets_table.php'),
-            ], 'laravel-xero-timesheet-sync-timesheet-table-migrations');
-        }
-
-        if (! Schema::hasTable('xero_timesheet_lines')) {
-            $timestamp = date('Y_m_d_His', time());
-
-            $this->publishes([
-                __DIR__.'/../database/migrations/create_xero_timesheet_lines_table.stub.php' => database_path('migrations/'.$timestamp.'_create_xero_timesheet_lines_table.php'),
-            ], 'laravel-xero-timesheet-sync-timesheet-table-migrations');
-        }
     }
 
     protected function registerCommands()
