@@ -28,7 +28,6 @@ class XeroTimesheetSummaryController extends Controller
     }
 
     /**
-     * @param  \Illuminate\Http\Request  $request
      * @return mixed
      */
     private function retrieveUserTimesheets(Request $request)

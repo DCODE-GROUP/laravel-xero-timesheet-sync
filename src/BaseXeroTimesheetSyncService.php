@@ -10,7 +10,6 @@ use XeroPHP\Remote\Exception\BadRequestException;
 class BaseXeroTimesheetSyncService extends BaseXeroService
 {
     /**
-     * @param  \Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet  $xeroTimesheet
      * @return false|void
      */
     public function updateXeroTimesheet(XeroTimesheet $xeroTimesheet)
