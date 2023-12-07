@@ -45,8 +45,8 @@ trait XeroTimesheetable
     private function updateTimesheetLines()
     {
         $model = XeroTimesheet::query()->periodBetween($this->start?->toDateString(), $this->stop?->toDateString())
-                              ->whereHasMorph('xerotimeable', [User::class], fn (Builder $builder) => $builder->where('id', $this->timesheetable_id))
-                              ->first();
+            ->whereHasMorph('xerotimeable', [User::class], fn (Builder $builder) => $builder->where('id', $this->timesheetable_id))
+            ->first();
 
         if ($model instanceof XeroTimesheet) {
             if ($this->start?->toDateString() != $this->stop?->toDateString()) {
@@ -60,11 +60,11 @@ trait XeroTimesheetable
 
                 if ($this->canSendToXero()) {
                     $startLine->update(['units' => round($this->start->floatDiffInHours($this->start->copy()
-                                                                                                    ->endOfDay()
-                                                                                                    ->addSecond()), 2)]);
+                        ->endOfDay()
+                        ->addSecond()), 2)]);
 
                     $endLine->update(['units' => round($this->stop->floatDiffInHours($this->stop->copy()
-                                                                                                ->startOfDay()), 2)]);
+                        ->startOfDay()), 2)]);
                 } else {
                     $startLine->update(['units' => 0]);
                     $endLine->update(['units' => 0]);

@@ -75,7 +75,7 @@ class XeroTimesheet extends Model
     public function scopePeriodBetween(Builder $query, string $startDate, string $endDate): Builder
     {
         return $query->whereDate('start_date', '<=', $startDate)
-                     ->whereDate('end_date', '>=', $endDate);
+            ->whereDate('end_date', '>=', $endDate);
     }
 
     public function scopeUserHasTimesheetForPeriod(Builder $query, array $userIds): Builder

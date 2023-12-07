@@ -24,7 +24,7 @@ class PayrollCalendarService
             ->first() ?? [];
     }
 
-    public function generatePeriodDays(string $payrollCalendarPeriod = null)
+    public function generatePeriodDays(?string $payrollCalendarPeriod = null)
     {
         if (is_null($payrollCalendarPeriod)) {
             return [];
@@ -38,7 +38,7 @@ class PayrollCalendarService
         return $this->periodDayGenerator($startDate, $endDate);
     }
 
-    public function generateCalendarPeriods(string $payrollCalendarId = null): array
+    public function generateCalendarPeriods(?string $payrollCalendarId = null): array
     {
         if (is_null($payrollCalendarId)) {
             return [];
@@ -90,7 +90,7 @@ class PayrollCalendarService
         ];
     }
 
-    public function getCalendarName(string $payrollCalendarId = null): string
+    public function getCalendarName(?string $payrollCalendarId = null): string
     {
         if (is_null($payrollCalendarId)) {
             return '';
@@ -159,7 +159,7 @@ class PayrollCalendarService
     /**
      * @return \Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet|false|\Illuminate\Database\Eloquent\Model
      */
-    public function findOrCreateXeroTimesheet(string $payrollCalendarPeriod = null, int|User $userId = null)
+    public function findOrCreateXeroTimesheet(?string $payrollCalendarPeriod = null, int|User|null $userId = null)
     {
         if (is_null($payrollCalendarPeriod) || is_null($userId)) {
             return false;
@@ -308,7 +308,7 @@ class PayrollCalendarService
             foreach ($days as $key => $label) {
                 $units = 0;
 
-                if ('xero_default_ordinary_earnings_rate_id' == $rate['key'] && isset($timesheets[$key]['units'])) {
+                if ($rate['key'] == 'xero_default_ordinary_earnings_rate_id' && isset($timesheets[$key]['units'])) {
                     $units = $timesheets[$key]['units'];
                 }
 

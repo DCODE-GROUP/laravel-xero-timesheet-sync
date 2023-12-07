@@ -136,8 +136,8 @@
             </form>
 
             @else
-                <p>no Please select the fields first</p>
-                @endif
+                <p>Please select the fields first</p>
+            @endif
 
         </div>
 
