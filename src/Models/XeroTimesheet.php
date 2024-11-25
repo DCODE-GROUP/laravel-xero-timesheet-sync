@@ -51,7 +51,7 @@ class XeroTimesheet extends Model
     public function prepareTimesheetLines(): array
     {
         return $this->lines()->get()->groupBy('earnings_rate_configuration_key')->map(function ($earningRate) {
-            $line = new TimesheetLine();
+            $line = new TimesheetLine;
             $line->setEarningsRateID($earningRate->first()->xero_earnings_rate_id);
             $line->setTrackingItemID($earningRate->first()->xero_tracking_item_id);
 
@@ -81,7 +81,7 @@ class XeroTimesheet extends Model
     public function scopeUserHasTimesheetForPeriod(Builder $query, array $userIds): Builder
     {
         return $query->whereIn('xerotimeable_id', $userIds)
-            ->where('xerotimeable_type', (new User())->getMorphClass());
+            ->where('xerotimeable_type', (new User)->getMorphClass());
     }
 
     public function isOutOfSyncWithXero(): bool

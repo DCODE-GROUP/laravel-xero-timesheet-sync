@@ -2,6 +2,4 @@
 
 namespace Dcodegroup\LaravelXeroTimesheetSync\Contracts;
 
-interface SyncsTimesheetsToXero
-{
-}
+interface SyncsTimesheetsToXero {}
