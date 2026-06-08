@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\Timesheet;
+use Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet;
+use Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheetLine;
+
 return [
     /*
     * --------------------------------------------------------------------------
@@ -16,19 +20,19 @@ return [
      * The assumption is this will be the model used for timesheets.
      * You should update this to match your timesheet model. Should be this
      */
-    'timesheet_model' => App\Models\Timesheet::class,
+    'timesheet_model' => Timesheet::class,
 
     /*
      * LaravelXeroTimesheet Model
      * The model being used for XeroTimesheet. Just in case it needs over writing or extending.
      */
-    'xero_timesheet_model' => \Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet::class,
+    'xero_timesheet_model' => XeroTimesheet::class,
 
     /*
      * LaravelXeroTimesheetLine Model
      * The model being used for XeroTimesheetLine. Just in case it needs over writing or extending.
      */
-    'xero_timesheet_line_model' => \Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheetLine::class,
+    'xero_timesheet_line_model' => XeroTimesheetLine::class,
 
     /*
      * The name of the base layout to wrap the pages in.

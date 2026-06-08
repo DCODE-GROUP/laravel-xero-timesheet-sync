@@ -10,6 +10,7 @@ use Dcodegroup\LaravelConfiguration\Models\Configuration;
 use Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet;
 use Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheetLine;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use XeroPHP\Models\PayrollAU\PayrollCalendar;
 
 class PayrollCalendarService
@@ -157,7 +158,7 @@ class PayrollCalendarService
     }
 
     /**
-     * @return \Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet|false|\Illuminate\Database\Eloquent\Model
+     * @return XeroTimesheet|false|Model
      */
     public function findOrCreateXeroTimesheet(?string $payrollCalendarPeriod = null, int|User|null $userId = null)
     {
@@ -247,7 +248,7 @@ class PayrollCalendarService
     private function getNextPaymentDate(array $calendar): string
     {
         return data_get($calendar, 'PaymentDate');
-        //return now()->addMonth()->format('Y-m-d');
+        // return now()->addMonth()->format('Y-m-d');
     }
 
     private function buildCalendarPeriodStartDates(array $calendar)

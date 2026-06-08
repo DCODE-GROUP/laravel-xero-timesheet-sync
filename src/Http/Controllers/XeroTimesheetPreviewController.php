@@ -7,6 +7,9 @@ use App\Models\User;
 use Dcodegroup\LaravelXeroTimesheetSync\Http\Requests\XeroTimesheetPreviewRequest;
 use Dcodegroup\LaravelXeroTimesheetSync\Models\XeroTimesheet;
 use Dcodegroup\LaravelXeroTimesheetSync\Service\PayrollCalendarService;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 
 class XeroTimesheetPreviewController extends Controller
 {
@@ -18,7 +21,7 @@ class XeroTimesheetPreviewController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
     public function __invoke(XeroTimesheetPreviewRequest $request)
     {
